@@ -61,7 +61,7 @@ export function SectionPage() {
   // Handle missing section
   if (!section) {
     return (
-      <AppLayout backTo="/sections" backLabel="Sections">
+      <AppLayout>
         <div className="text-center py-12">
           <p className="text-stone-600 dark:text-stone-400">
             Section not found: {sectionId}
@@ -79,7 +79,7 @@ export function SectionPage() {
   const nextSection = !isLastSection ? sections[currentIndex + 1] : null
 
   return (
-    <AppLayout backTo="/sections" backLabel="Sections" title={section.title}>
+    <AppLayout>
       <div className="space-y-6">
         {/* Page intro */}
         <div className="mb-8">
