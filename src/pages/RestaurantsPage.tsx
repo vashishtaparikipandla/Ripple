@@ -163,11 +163,13 @@ export function RestaurantsPage() {
                 className="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm mb-4"
               >
                 <div className="h-40 relative">
-                  <img src={rest.image} alt={rest.name} className="w-full h-full object-cover" />
+                  <img src={rest.image} alt={rest.name} className={`w-full h-full object-cover ${rest.isOpen ? '' : 'grayscale opacity-80'}`} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <div className={`absolute top-3 left-3 px-2 py-0.5 rounded-full text-[10px] font-bold ${rest.isOpen ? 'bg-green-500/90 text-white' : 'bg-slate-700/80 text-slate-200'}`}>
-                    {rest.isOpen ? '● Open' : '● Closed'}
-                  </div>
+                  {!rest.isOpen && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-black backdrop-blur-md tracking-wide">CLOSED</span>
+                    </div>
+                  )}
                   <button
                     onClick={e => toggleSave(e, rest.id)}
                     className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center shadow-sm"
@@ -175,7 +177,7 @@ export function RestaurantsPage() {
                     <Heart className={`w-4 h-4 ${saved[rest.id] ? 'fill-rose-500 text-rose-500' : 'text-slate-400'}`} />
                   </button>
                   {rest.tierDiscount && (
-                    <div className="absolute bottom-3 left-3 flex items-center gap-1 bg-blue-600 px-2 py-0.5 rounded-full">
+                    <div className={`absolute bottom-3 left-3 flex items-center gap-1 px-2 py-0.5 rounded-full badge-${rest.userTier?.toLowerCase()}`}>
                       <Droplets className="w-3 h-3 text-white" />
                       <span className="text-[10px] font-bold text-white">{rest.userTier} · {rest.tierDiscount}% OFF</span>
                     </div>

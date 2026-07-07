@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Droplets, Star, Heart, MessageSquare, Share2,
+  Droplets, Heart, MessageSquare, Share2,
   CheckSquare, Palette, HelpCircle, Info, LogOut,
   Settings, ChevronRight, Edit3, Camera, Bell, X, CreditCard, MapPin
 } from "lucide-react";
@@ -24,12 +24,6 @@ const USER = {
   sharedCount: 5,
 };
 
-const WISHLIST = [
-  { id: "2", name: "Sushi Nami",     cuisine: "Japanese",   rating: 4.9, image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=200&h=120&fit=crop" },
-  { id: "3", name: "Bloom Bistro",   cuisine: "French",     rating: 4.7, image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&h=120&fit=crop" },
-];
-
-type ProfileTab = "activity" | "wallet" | "saved";
 type FlowItem = { id: string; icon: any; label: string; sub: string; color: string; bg: string; danger?: boolean; isSupport?: boolean; path?: string };
 
 const SECTION_LINKS: { section: string; items: FlowItem[] }[] = [
@@ -47,7 +41,7 @@ const SECTION_LINKS: { section: string; items: FlowItem[] }[] = [
     items: [
       { id: 'notifs',  icon: Bell,       label: "Notifications",   sub: "Manage alerts",         color: "text-orange-500", bg: "bg-orange-50", path: "/profile/notifications" },
       { id: 'payment', icon: CreditCard, label: "Payment Methods", sub: "Cards, Apple Pay",      color: "text-cyan-600",   bg: "bg-cyan-50" },
-      { id: 'address', icon: MapPin,     label: "Addresses",       sub: "Home, Work",            color: "text-amber-600",  bg: "bg-amber-50" },
+      { id: 'address', icon: MapPin,     label: "Addresses",       sub: "Home, Work",            color: "text-amber-600",  bg: "bg-amber-50", path: "/profile/addresses" },
       { id: 'theme',   icon: Palette,    label: "Theme",           sub: "Dark / Light / System", color: "text-indigo-600", bg: "bg-indigo-50", path: "/profile/theme" },
       { id: 'food',    icon: Heart,      label: "Dietary Needs",   sub: "Allergies & preferences", color: "text-rose-600", bg: "bg-rose-50", path: "/profile/preferences" },
     ]
@@ -71,7 +65,6 @@ const SECTION_LINKS: { section: string; items: FlowItem[] }[] = [
 
 export function ProfilePage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<ProfileTab>("activity");
   const [openFlow, setOpenFlow]   = useState<FlowItem | null>(null);
 
   const handleItemClick = (item: FlowItem) => {
@@ -117,18 +110,18 @@ export function ProfilePage() {
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-slate-50 rounded-2xl p-3 text-center border border-slate-100">
-              <p className="text-lg font-black text-slate-900">{USER.reviewCount}</p>
-              <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Reviews</p>
-            </div>
-            <div className="bg-slate-50 rounded-2xl p-3 text-center border border-slate-100">
-              <p className="text-lg font-black text-slate-900">{USER.beenHereCount}</p>
-              <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Places</p>
-            </div>
-            <div className="bg-green-50 rounded-2xl p-3 text-center border border-green-100">
-              <p className="text-lg font-black text-green-700">${USER.totalSaved}</p>
-              <p className="text-[10px] text-green-600 font-semibold mt-0.5">Saved</p>
-            </div>
+            <Link to="/profile/tier/gold" className="bg-amber-50 rounded-2xl p-3 text-center border border-amber-100 flex flex-col items-center justify-center transition-transform active:scale-95">
+              <p className="text-lg font-black text-amber-700">2</p>
+              <p className="text-[10px] text-amber-600 font-bold mt-0.5 uppercase tracking-wide">Gold</p>
+            </Link>
+            <Link to="/profile/tier/silver" className="bg-slate-50 rounded-2xl p-3 text-center border border-slate-200 flex flex-col items-center justify-center transition-transform active:scale-95">
+              <p className="text-lg font-black text-slate-700">5</p>
+              <p className="text-[10px] text-slate-500 font-bold mt-0.5 uppercase tracking-wide">Silver</p>
+            </Link>
+            <Link to="/profile/tier/bronze" className="bg-[#FEF0EC] rounded-2xl p-3 text-center border border-[#E8431A]/20 flex flex-col items-center justify-center transition-transform active:scale-95">
+              <p className="text-lg font-black" style={{ color: BRAND }}>12</p>
+              <p className="text-[10px] font-bold mt-0.5 uppercase tracking-wide" style={{ color: BRAND }}>Bronze</p>
+            </Link>
           </div>
         </div>
 
@@ -165,128 +158,78 @@ export function ProfilePage() {
           </div>
         </div>
 
-        {/* ── Tabs ── */}
-        <div className="px-4 mb-4 flex gap-2">
-          {([
-            { id: "activity", label: "Activity" },
-            { id: "wallet",   label: "Rewards" },
-            { id: "saved",    label: "Saved" },
-          ] as { id: ProfileTab; label: string }[]).map(t => (
-            <button
-              key={t.id}
-              onClick={() => setActiveTab(t.id)}
-              className={`px-4 py-2 rounded-full text-xs font-black transition-colors ${
-                activeTab === t.id ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+        {/* ── Rewards Section ── */}
+        <div className="px-4 space-y-4 mb-4">
+          <div className="bg-white rounded-3xl border border-slate-100 p-5 shadow-sm">
+            <h3 className="text-sm font-black text-slate-900 mb-4">How to Earn 🌊</h3>
+            <div className="space-y-3">
+              {[
+                { emoji: "🍽️", action: "Dine at a restaurant",       points: "+50 pts" },
+                { emoji: "⭐", action: "Write a review",              points: "+20 pts" },
+                { emoji: "📅", action: "Book through Ripple",         points: "+30 pts" },
+                { emoji: "👥", action: "Refer a friend",              points: "+100 pts" },
+                { emoji: "📸", action: "Share a photo",               points: "+10 pts" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl">{item.emoji}</span>
+                    <p className="text-sm text-slate-700 font-medium">{item.action}</p>
+                  </div>
+                  <span className="text-sm font-black" style={{ color: BRAND }}>{item.points}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-3xl border border-slate-100 p-5 shadow-sm">
+            <h3 className="text-sm font-black text-slate-900 mb-4">Redeem Points</h3>
+            <div className="space-y-3">
+              {[
+                { emoji: "🎁", label: "$10 Amazon Gift Card",  pts: 1000 },
+                { emoji: "🍕", label: "Free Pizza (any partner restaurant)", pts: 800 },
+                { emoji: "💳", label: "$5 Bill Credit",        pts: 500 },
+                { emoji: "🚕", label: "$10 Uber Credit",       pts: 1000 },
+              ].map((r, i) => (
+                <div key={i} className="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl">{r.emoji}</span>
+                    <p className="text-xs font-semibold text-slate-700">{r.label}</p>
+                  </div>
+                  <button disabled={USER.points < r.pts} className={`px-3 py-1.5 rounded-xl text-xs font-black text-white ${USER.points >= r.pts ? '' : 'opacity-30'}`} style={USER.points >= r.pts ? { backgroundColor: BRAND } : { backgroundColor: '#94a3b8' }}>
+                    {r.pts.toLocaleString()} pts
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* ── Activity Tab ── */}
-        {activeTab === "activity" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 space-y-4">
-            {SECTION_LINKS.map(section => (
-              <div key={section.section}>
-                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{section.section}</h3>
-                <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden divide-y divide-slate-100">
-                  {section.items.map((item, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handleItemClick(item)}
-                      className={`w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors active:bg-slate-50 ${item.danger ? 'opacity-90' : ''}`}
-                    >
-                      <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center shrink-0`}>
-                        <item.icon className={`w-4.5 h-4.5 ${item.color}`} />
-                      </div>
-                      <div className="flex-1">
-                        <p className={`text-sm font-bold ${item.danger ? 'text-rose-500' : 'text-slate-800'}`}>{item.label}</p>
-                        {item.sub && <p className="text-[11px] text-slate-400 mt-0.5">{item.sub}</p>}
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-slate-300" />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </motion.div>
-        )}
-
-        {/* ── Wallet / Rewards Tab ── */}
-        {activeTab === "wallet" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 space-y-4">
-            <div className="bg-white rounded-3xl border border-slate-100 p-5">
-              <h3 className="text-sm font-black text-slate-900 mb-4">How to Earn 🌊</h3>
-              <div className="space-y-3">
-                {[
-                  { emoji: "🍽️", action: "Dine at a restaurant",       points: "+50 pts" },
-                  { emoji: "⭐", action: "Write a review",              points: "+20 pts" },
-                  { emoji: "📅", action: "Book through Ripple",         points: "+30 pts" },
-                  { emoji: "👥", action: "Refer a friend",              points: "+100 pts" },
-                  { emoji: "📸", action: "Share a photo",               points: "+10 pts" },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">{item.emoji}</span>
-                      <p className="text-sm text-slate-700 font-medium">{item.action}</p>
+        {/* ── Settings Sections ── */}
+        <div className="px-4 space-y-4">
+          {SECTION_LINKS.map(section => (
+            <div key={section.section}>
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">{section.section}</h3>
+              <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden divide-y divide-slate-100 shadow-sm">
+                {section.items.map((item, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleItemClick(item)}
+                    className={`w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors active:bg-slate-50 ${item.danger ? 'opacity-90' : ''}`}
+                  >
+                    <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center shrink-0`}>
+                      <item.icon className={`w-4.5 h-4.5 ${item.color}`} />
                     </div>
-                    <span className="text-sm font-black" style={{ color: BRAND }}>{item.points}</span>
-                  </div>
+                    <div className="flex-1">
+                      <p className={`text-sm font-bold ${item.danger ? 'text-rose-500' : 'text-slate-800'}`}>{item.label}</p>
+                      {item.sub && <p className="text-[11px] text-slate-400 mt-0.5">{item.sub}</p>}
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-300" />
+                  </button>
                 ))}
               </div>
             </div>
-
-            <div className="bg-white rounded-3xl border border-slate-100 p-5">
-              <h3 className="text-sm font-black text-slate-900 mb-4">Redeem Points</h3>
-              <div className="space-y-3">
-                {[
-                  { emoji: "🎁", label: "$10 Amazon Gift Card",  pts: 1000 },
-                  { emoji: "🍕", label: "Free Pizza (any partner restaurant)", pts: 800 },
-                  { emoji: "💳", label: "$5 Bill Credit",        pts: 500 },
-                  { emoji: "🚕", label: "$10 Uber Credit",       pts: 1000 },
-                ].map((r, i) => (
-                  <div key={i} className="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">{r.emoji}</span>
-                      <p className="text-xs font-semibold text-slate-700">{r.label}</p>
-                    </div>
-                    <button disabled={USER.points < r.pts} className={`px-3 py-1.5 rounded-xl text-xs font-black text-white ${USER.points >= r.pts ? '' : 'opacity-30'}`} style={USER.points >= r.pts ? { backgroundColor: BRAND } : { backgroundColor: '#94a3b8' }}>
-                      {r.pts.toLocaleString()} pts
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* ── Saved Tab ── */}
-        {activeTab === "saved" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 space-y-3">
-            {WISHLIST.map(place => (
-              <Link to={`/restaurant/${place.id}`} key={place.id}>
-                <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden flex shadow-sm mb-3">
-                  <img src={place.image} alt={place.name} className="w-24 h-24 object-cover shrink-0" />
-                  <div className="flex-1 p-4 flex flex-col justify-center">
-                    <h4 className="font-black text-[15px] text-slate-900 leading-tight">{place.name}</h4>
-                    <p className="text-xs text-slate-400 mt-0.5">{place.cuisine}</p>
-                    <div className="flex items-center gap-1 mt-2">
-                      <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                      <span className="text-xs font-black text-slate-700">{place.rating}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center pr-4">
-                    <Heart className="w-5 h-5 fill-rose-500 text-rose-500" />
-                  </div>
-                </div>
-              </Link>
-            ))}
-            <Link to="/restaurants" className="block text-center py-3 text-sm font-bold" style={{ color: BRAND }}>
-              + Explore more restaurants
-            </Link>
-          </motion.div>
-        )}
+          ))}
+        </div>
       </div>
 
       {/* ── Dummy Flow Drawer ── */}

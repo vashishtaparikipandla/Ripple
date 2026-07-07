@@ -15,10 +15,11 @@ import { EditProfilePage }    from '@/pages/EditProfilePage'
 import { SupportPage }        from '@/pages/SupportPage'
 import { MyReviewsPage }      from '@/pages/MyReviewsPage'
 import { RateExperiencePage } from '@/pages/RateExperiencePage'
+import { TierStatusPage }     from '@/pages/TierStatusPage'
 import { 
   FoodPreferencesPage, TransactionHistoryPage, SavedPlacesPage, 
   SharedDiscountsPage, NotificationSettingsPage, ThemeSettingsPage, 
-  FeedbackPage, AboutPage 
+  FeedbackPage, AboutPage, AddressesPage 
 } from '@/pages/ProfileSubPages'
 
 export const router = createHashRouter([
@@ -46,6 +47,8 @@ export const router = createHashRouter([
   { path: '/profile/theme',     element: <AppLayout><ThemeSettingsPage /></AppLayout> },
   { path: '/profile/feedback',  element: <AppLayout><FeedbackPage /></AppLayout> },
   { path: '/profile/about',     element: <AppLayout><AboutPage /></AppLayout> },
+  { path: '/profile/addresses', element: <AppLayout><AddressesPage /></AppLayout> },
+  { path: '/profile/tier/:tier', element: <AppLayout><TierStatusPage /></AppLayout> },
   { path: '/support',           element: <AppLayout><SupportPage /></AppLayout> },
   { path: '/notifications',     element: <AppLayout><NotificationsPage /></AppLayout> },
 ])

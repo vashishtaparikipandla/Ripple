@@ -22,10 +22,10 @@ const MOODS = [
 ]
 
 const DEALS = [
-  { id: '1', name: 'The Rustic Spoon', discount: '10% off', tag: 'Silver Ripple',   tagCls: 'badge-silver', image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=300&h=180&fit=crop' },
-  { id: '4', name: 'Rooftop Garden',   discount: '30% off', tag: 'Tonight only',    tagCls: 'badge-gold',   image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=300&h=180&fit=crop' },
-  { id: '5', name: 'Cozy Corner Cafe', discount: '15% off', tag: 'Gold member',     tagCls: 'badge-gold',   image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=300&h=180&fit=crop' },
-  { id: '2', name: 'Sushi Nami',       discount: '12% off', tag: 'New on Ripple',   tagCls: 'badge-bronze', image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=300&h=180&fit=crop' },
+  { id: '1', name: 'The Rustic Spoon', cuisine: 'Modern American', discount: '10% off', tag: 'Silver Ripple',   tagCls: 'badge-silver', image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=300&h=180&fit=crop' },
+  { id: '4', name: 'Rooftop Garden',   cuisine: 'Contemporary',    discount: '30% off', tag: 'Tonight only',    tagCls: 'badge-gold',   image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=300&h=180&fit=crop' },
+  { id: '5', name: 'Cozy Corner Cafe', cuisine: 'Cafe & Brunch',   discount: '15% off', tag: 'Gold member',     tagCls: 'badge-gold',   image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=300&h=180&fit=crop' },
+  { id: '2', name: 'Sushi Nami',       cuisine: 'Japanese',        discount: '12% off', tag: 'New on Ripple',   tagCls: 'badge-bronze', image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=300&h=180&fit=crop' },
 ]
 
 const TRENDING = [
@@ -296,7 +296,8 @@ export function HomePage() {
                   </div>
                   <div className="p-3">
                     <p className="font-black text-[13px] text-slate-900 truncate">{d.name}</p>
-                    <p className="text-xs font-bold mt-0.5" style={{ color: BRAND }}>{d.discount}</p>
+                    <p className="text-[10px] text-slate-500 font-medium truncate mt-0.5">{d.cuisine}</p>
+                    <p className="text-xs font-bold mt-1" style={{ color: BRAND }}>{d.discount}</p>
                   </div>
                 </motion.div>
               </Link>

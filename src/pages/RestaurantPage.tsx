@@ -29,6 +29,7 @@ const RESTAURANT = {
   phone: '+1 (212) 555-0198',
   branches: ['Uptown', 'Brooklyn', 'Midtown'],
   currentDiscount: '10',
+  isOpen: true, // Mock value, can be overridden by URL param
   userTier: 'Silver' as Tier,
   userVisits: 7,
   goldVisitsNeeded: 10,
@@ -270,10 +271,10 @@ function RippleViz({ userTier, visits, visitsForGold }: { userTier: Tier; visits
 }
 
 // ── Tier benefit row ─────────────────────────────────────────────────────────
-function TierRow({ tier, perk, unlocked, visitsNeeded }: { tier: Tier; perk: string; unlocked: boolean; visitsNeeded: number }) {
+function TierRow({ tier, perk, unlocked, visitsNeeded, isActive }: { tier: Tier; perk: string; unlocked: boolean; visitsNeeded: number; isActive: boolean }) {
   const cfg = TIER_CONFIG[tier]
   return (
-    <div className={`flex items-center gap-3 p-3.5 rounded-2xl ${unlocked ? 'bg-slate-50' : 'bg-white opacity-60'}`}>
+    <div className={`flex items-center gap-3 p-3.5 rounded-2xl ${isActive ? 'bg-slate-50' : unlocked ? 'bg-slate-50 opacity-50 grayscale' : 'bg-white opacity-60'}`}>
       <div className={`w-9 h-9 rounded-full ${cfg.cls} flex items-center justify-center shrink-0`}>
         {unlocked
           ? <CheckCircle className="w-5 h-5 text-white" />
@@ -287,7 +288,8 @@ function TierRow({ tier, perk, unlocked, visitsNeeded }: { tier: Tier; perk: str
         </div>
         <p className="text-[11px] text-slate-600 mt-0.5 font-medium">{perk}</p>
       </div>
-      {unlocked && <span className="text-[10px] font-black text-green-600">Active</span>}
+      {isActive && <span className="text-[10px] font-black text-green-600">Active</span>}
+      {unlocked && !isActive && <span className="text-[10px] font-black text-slate-400">Completed</span>}
     </div>
   )
 }
@@ -390,8 +392,9 @@ export function RestaurantPage() {
   const [searchParams] = useSearchParams()
   const isDemoGold = searchParams.get('demo') === 'gold'
   const isTabMenu = searchParams.get('tab') === 'menu'
+  const isClosedDemo = searchParams.get('closed') === 'true'
   
-  const rest = RESTAURANT
+  const rest = { ...RESTAURANT, isOpen: isClosedDemo ? false : RESTAURANT.isOpen }
 
   const cart = useStore(state => state.cart)
 
@@ -591,8 +594,36 @@ export function RestaurantPage() {
               <div className="bg-white rounded-3xl border border-slate-100 p-4 space-y-2.5">
                 <h3 className="text-sm font-black text-slate-900 mb-1">All Ripple Tiers</h3>
                 {rest.offers.map(o => (
-                  <TierRow key={o.tier} tier={o.tier} perk={o.perk} unlocked={o.unlocked} visitsNeeded={o.visitsNeeded} />
+                  <TierRow key={o.tier} tier={o.tier} perk={o.perk} unlocked={o.unlocked} visitsNeeded={o.visitsNeeded} isActive={o.tier === rest.userTier} />
                 ))}
+              </div>
+
+              {/* Earn Rewards Tasks */}
+              <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
+                <div className="px-5 pt-5 pb-3 border-b border-slate-50">
+                  <h3 className="text-sm font-black text-slate-900">Earn Rewards</h3>
+                  <p className="text-[11px] text-slate-500 font-medium mt-0.5">Complete tasks to unlock perks faster</p>
+                </div>
+                <div className="divide-y divide-slate-50">
+                  {[
+                    { title: 'Write a review on Google Maps', reward: 'Free Coke', icon: '🗺️' },
+                    { title: 'Share a photo of your meal', reward: 'Free Dessert', icon: '📸' },
+                    { title: 'Follow us on Instagram', reward: '+1 Visit', icon: '📱' }
+                  ].map((task, i) => (
+                    <div key={i} className="p-4 flex items-center gap-4 hover:bg-slate-50 transition-colors cursor-pointer">
+                      <div className="w-10 h-10 rounded-2xl bg-slate-100 flex items-center justify-center text-xl shrink-0">
+                        {task.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-sm text-slate-900 truncate">{task.title}</p>
+                        <p className="text-[11px] font-black text-green-600 mt-0.5 tracking-wide uppercase">{task.reward}</p>
+                      </div>
+                      <button className="px-3 py-1.5 rounded-full bg-slate-100 text-[10px] font-black text-slate-700 shrink-0 uppercase tracking-wide">
+                        Do Task
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Share status CTA */}
@@ -735,14 +766,21 @@ export function RestaurantPage() {
         <button className="w-11 h-11 rounded-2xl bg-slate-100 flex items-center justify-center shrink-0">
           <Navigation className="w-5 h-5 text-slate-600" />
         </button>
-        <motion.button
-          whileTap={{ scale: 0.97 }}
-          onClick={() => setShowBooking(true)}
-          className="flex-1 rounded-2xl text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg"
-          style={{ backgroundColor: BRAND }}
-        >
-          Book a Table
-        </motion.button>
+        {!rest.isOpen ? (
+          <div className="flex-1 rounded-2xl bg-slate-200 text-slate-500 font-black text-sm flex flex-col items-center justify-center cursor-not-allowed border border-slate-300/50">
+            <span>Closed Now</span>
+            <span className="text-[10px] font-semibold opacity-70">Reopens Tomorrow</span>
+          </div>
+        ) : (
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => setShowBooking(true)}
+            className="flex-1 rounded-2xl text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg"
+            style={{ backgroundColor: BRAND }}
+          >
+            Book a Table
+          </motion.button>
+        )}
       </div>
 
       {/* ── Booking Drawer ── */}
