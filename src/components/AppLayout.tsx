@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react'
 import { NavLink, useLocation, Navigate } from 'react-router-dom'
+import { useStore } from '../lib/store'
 import { Home, UtensilsCrossed, CalendarDays, User } from 'lucide-react'
 
 interface AppLayoutProps {
@@ -8,7 +9,7 @@ interface AppLayoutProps {
 
 // Pages that skip auth check and bottom nav
 const NO_AUTH_PATHS   = ['/splash', '/onboard', '/auth']
-const HIDE_NAV_PATHS  = ['/splash', '/onboard', '/auth', '/restaurant/']
+const HIDE_NAV_PATHS  = ['/splash', '/onboard', '/auth', '/restaurant/', '/cart', '/profile/']
 
 function isLoggedIn() {
   return localStorage.getItem('ripple_auth') === 'true'
@@ -19,6 +20,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const hideNav    = HIDE_NAV_PATHS.some(p => location.pathname.startsWith(p))
   const skipAuth   = NO_AUTH_PATHS.some(p => location.pathname.startsWith(p))
   const needsLogin = !skipAuth && !isLoggedIn()
+  const theme = useStore(state => state.theme)
 
   // ── Compute scale to fit the phone in one viewport ──────────────────
   const [scale, setScale] = useState(1)
@@ -70,7 +72,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           context so child pages can use position:fixed and stay within the frame.
         */}
         <div
-          className="w-full h-full bg-[#F7F5F2] rounded-[3.4rem] flex flex-col overflow-hidden"
+          className={`w-full h-full bg-[#F7F5F2] rounded-[3.4rem] flex flex-col overflow-hidden ${theme === 'dark' ? 'dark' : ''}`}
           style={{ transform: 'translateZ(0)' }}
         >
           {/* Status bar / notch */}

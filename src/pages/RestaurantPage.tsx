@@ -5,9 +5,11 @@ import {
   ArrowLeft, Star, Phone, Navigation, X, Search,
   Globe, Clock, Users, Building, Droplets, CheckCircle,
   Share2, Heart, Copy, MessageCircle, Instagram, ChevronRight,
-  AlertTriangle, UserPlus, Instagram as Insta, ThumbsUp, Award
+  AlertTriangle, UserPlus, Instagram as Insta, ThumbsUp, Award,
+  ShoppingCart, Plus, Minus
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import { useStore } from '../lib/store'
 
 const BRAND = '#E8431A'
 
@@ -244,9 +246,6 @@ function RippleViz({ userTier, visits, visitsForGold }: { userTier: Tier; visits
         {/* Center info */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center mt-2">
-            <div className={`inline-flex px-2.5 py-1 rounded-full text-[10px] font-black text-white ${TIER_CONFIG[userTier].cls}`}>
-              {userTier}
-            </div>
             <p className="text-[11px] font-black text-slate-700 mt-1">{RESTAURANT.currentDiscount}% OFF</p>
           </div>
         </div>
@@ -296,28 +295,58 @@ function TierRow({ tier, perk, unlocked, visitsNeeded }: { tier: Tier; perk: str
 // ── Menu item card ──────────────────────────────────────────────────────────
 function MenuItemCard({ item }: { item: typeof RESTAURANT.menu[0]['items'][0] }) {
   const [expanded, setExpanded] = useState(false)
+  const cart = useStore(state => state.cart)
+  const addToCart = useStore(state => state.addToCart)
+  const updateQuantity = useStore(state => state.updateQuantity)
+
+  const cartItem = cart.find(c => c.name === item.name)
+
+  const handleAdd = () => {
+    addToCart({ id: item.name, name: item.name, desc: item.desc, price: item.price.toString(), image: item.img })
+  }
+
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
       <div className="flex gap-3 p-3">
         <img src={item.img} alt={item.name} className="w-20 h-20 rounded-xl object-cover shrink-0" />
-        <div className="flex-1 min-w-0">
-          <div className="flex justify-between items-start gap-2">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <div className={`w-3 h-3 rounded-sm border-2 shrink-0 ${item.veg ? 'border-green-600' : 'border-rose-600'}`}>
-                <div className={`w-1.5 h-1.5 rounded-full m-auto mt-px ${item.veg ? 'bg-green-600' : 'bg-rose-600'}`} />
+        <div className="flex-1 min-w-0 flex flex-col justify-between">
+          <div>
+            <div className="flex justify-between items-start gap-2">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <div className={`w-3 h-3 rounded-sm border-2 shrink-0 ${item.veg ? 'border-green-600' : 'border-rose-600'}`}>
+                  <div className={`w-1.5 h-1.5 rounded-full m-auto mt-px ${item.veg ? 'bg-green-600' : 'bg-rose-600'}`} />
+                </div>
+                <h4 className="font-black text-[13px] text-slate-900 truncate">{item.name}</h4>
               </div>
-              <h4 className="font-black text-[13px] text-slate-900 truncate">{item.name}</h4>
+              <span className="font-black text-sm text-slate-900 shrink-0">${item.price}</span>
             </div>
-            <span className="font-black text-sm text-slate-900 shrink-0">${item.price}</span>
+            <p className="text-[11px] text-slate-500 mt-0.5 leading-snug line-clamp-2 font-medium">{item.desc}</p>
           </div>
-          <p className="text-[11px] text-slate-500 mt-0.5 leading-snug line-clamp-2 font-medium">{item.desc}</p>
-          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-            <span className="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full">{item.cals} kcal</span>
-            <span className="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full">{item.protein}g protein</span>
-            <button onClick={() => setExpanded(e => !e)} className="flex items-center gap-1 ml-auto">
-              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-              <span className="text-[10px] font-black text-slate-600">{item.rating} ({item.reviewCount})</span>
-            </button>
+          
+          <div className="flex items-center justify-between mt-1.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full">{item.cals} kcal</span>
+              <button onClick={() => setExpanded(e => !e)} className="flex items-center gap-1">
+                <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                <span className="text-[10px] font-black text-slate-600">{item.rating}</span>
+              </button>
+            </div>
+            
+            {cartItem ? (
+              <div className="flex items-center gap-3 bg-slate-100 rounded-xl p-1 shadow-sm">
+                <button onClick={() => updateQuantity(cartItem.id, cartItem.quantity - 1)} className="w-6 h-6 bg-white rounded-lg flex items-center justify-center text-slate-600 shadow-sm">
+                  <Minus className="w-3 h-3" />
+                </button>
+                <span className="text-xs font-black w-3 text-center">{cartItem.quantity}</span>
+                <button onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)} className="w-6 h-6 bg-white rounded-lg flex items-center justify-center text-slate-600 shadow-sm">
+                  <Plus className="w-3 h-3" />
+                </button>
+              </div>
+            ) : (
+              <button onClick={handleAdd} className="bg-[#FEF0EC] text-[#E8431A] text-[11px] font-black px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-sm">
+                <Plus className="w-3 h-3" /> Add
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -360,10 +389,13 @@ export function RestaurantPage() {
   const { id: _id } = useParams()
   const [searchParams] = useSearchParams()
   const isDemoGold = searchParams.get('demo') === 'gold'
+  const isTabMenu = searchParams.get('tab') === 'menu'
   
   const rest = RESTAURANT
 
-  const [activeTab, setActiveTab]     = useState<Tab>('menu')
+  const cart = useStore(state => state.cart)
+
+  const [activeTab, setActiveTab]       = useState<Tab>(isTabMenu ? 'menu' : 'ripple')
   const [showBooking, setShowBooking] = useState(false)
   const [showShare, setShowShare]     = useState(false)
   const [menuSearch, setMenuSearch]   = useState('')
@@ -400,7 +432,7 @@ export function RestaurantPage() {
 
   const tabs: { id: Tab; label: string }[] = [
     { id: 'menu',    label: 'Menu' },
-    { id: 'ripple',  label: '🌊 My Ripple' },
+    { id: 'ripple',  label: 'My Ripple' },
     { id: 'reviews', label: 'Reviews' },
     { id: 'photos',  label: 'Photos' },
     { id: 'about',   label: 'About' },
@@ -543,9 +575,14 @@ export function RestaurantPage() {
 
               {/* Concentric visualization */}
               <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-                <div className="px-5 pt-5 pb-1">
-                  <h3 className="text-base font-black text-slate-900">Your Ripple</h3>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">Loyalty at The Rustic Spoon</p>
+                <div className="px-5 pt-5 pb-1 flex justify-between items-start">
+                  <div>
+                    <h3 className="text-base font-black text-slate-900">Your Ripple</h3>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">Loyalty at The Rustic Spoon</p>
+                  </div>
+                  <div className={`inline-flex px-2.5 py-1 rounded-full text-[10px] font-black text-white ${TIER_CONFIG[rest.userTier].cls}`}>
+                    {rest.userTier}
+                  </div>
                 </div>
                 <RippleViz userTier={rest.userTier} visits={rest.userVisits} visitsForGold={rest.goldVisitsNeeded} />
               </div>
@@ -559,8 +596,8 @@ export function RestaurantPage() {
               </div>
 
               {/* Share status CTA */}
-              <button onClick={() => setShowShare(true)} className="w-full flex items-center justify-between px-5 py-4 rounded-3xl text-white shadow-md" style={{ background: 'linear-gradient(135deg, #E8431A, #C0300D)' }}>
-                <div>
+              <button onClick={() => setShowShare(true)} className="w-full flex items-center justify-between px-5 py-4 rounded-3xl text-white shadow-md text-left" style={{ background: 'linear-gradient(135deg, #E8431A, #C0300D)' }}>
+                <div className="flex-1 pr-4">
                   <p className="font-black text-sm">Share your Silver status</p>
                   <p className="text-[11px] text-white/70 mt-0.5">Gift your 10% discount to a friend for one visit</p>
                 </div>
@@ -916,6 +953,28 @@ export function RestaurantPage() {
         )}
       </AnimatePresence>
 
+      {/* ── Floating Cart ── */}
+      <AnimatePresence>
+        {cart.length > 0 && (
+          <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 100, opacity: 0 }} className="fixed bottom-4 left-4 right-4 z-50">
+            <Link to="/cart" className="bg-[#E8431A] text-white p-4 rounded-3xl flex items-center justify-between shadow-[0_8px_30px_rgb(232,67,26,0.3)]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
+                  <ShoppingCart className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-black text-white">{cart.length} item{cart.length > 1 ? 's' : ''}</p>
+                  <p className="text-xs font-bold text-white/70">${cart.reduce((a,b) => a + parseFloat(b.price) * b.quantity, 0).toFixed(2)}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-sm font-black">View Cart</span>
+                <ChevronRight className="w-4 h-4" />
+              </div>
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

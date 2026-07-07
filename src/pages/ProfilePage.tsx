@@ -30,33 +30,34 @@ const WISHLIST = [
 ];
 
 type ProfileTab = "activity" | "wallet" | "saved";
-type FlowItem = { id: string; icon: any; label: string; sub: string; color: string; bg: string; danger?: boolean; isSupport?: boolean };
+type FlowItem = { id: string; icon: any; label: string; sub: string; color: string; bg: string; danger?: boolean; isSupport?: boolean; path?: string };
 
 const SECTION_LINKS: { section: string; items: FlowItem[] }[] = [
   {
     section: "My Activity",
     items: [
-      { id: 'reviews', icon: MessageSquare, label: "Your Reviews",   sub: `${USER.reviewCount} reviews written`,  color: "text-blue-600",   bg: "bg-blue-50" },
-      { id: 'saved',   icon: Heart,         label: "Saved Places",   sub: `${USER.savedCount} saved`,             color: "text-rose-500",   bg: "bg-rose-50" },
+      { id: 'reviews', icon: MessageSquare, label: "Your Reviews",   sub: `${USER.reviewCount} reviews written`,  color: "text-blue-600",   bg: "bg-blue-50", path: "/profile/reviews" },
+      { id: 'saved',   icon: Heart,         label: "Saved Places",   sub: `${USER.savedCount} saved`,             color: "text-rose-500",   bg: "bg-rose-50", path: "/profile/saved" },
       { id: 'visited', icon: CheckSquare,   label: "Been Here",      sub: `${USER.beenHereCount} places visited`, color: "text-green-600",  bg: "bg-green-50" },
-      { id: 'shared',  icon: Share2,        label: "Shared",         sub: `${USER.sharedCount} shares`,           color: "text-purple-600", bg: "bg-purple-50" },
+      { id: 'shared',  icon: Share2,        label: "Shared",         sub: `${USER.sharedCount} shares`,           color: "text-purple-600", bg: "bg-purple-50", path: "/profile/shared" },
     ]
   },
   {
     section: "Preferences",
     items: [
-      { id: 'notifs',  icon: Bell,       label: "Notifications",   sub: "Manage alerts",         color: "text-orange-500", bg: "bg-orange-50" },
+      { id: 'notifs',  icon: Bell,       label: "Notifications",   sub: "Manage alerts",         color: "text-orange-500", bg: "bg-orange-50", path: "/profile/notifications" },
       { id: 'payment', icon: CreditCard, label: "Payment Methods", sub: "Cards, Apple Pay",      color: "text-cyan-600",   bg: "bg-cyan-50" },
       { id: 'address', icon: MapPin,     label: "Addresses",       sub: "Home, Work",            color: "text-amber-600",  bg: "bg-amber-50" },
-      { id: 'theme',   icon: Palette,    label: "Theme",           sub: "Dark / Light / System", color: "text-indigo-600", bg: "bg-indigo-50" },
+      { id: 'theme',   icon: Palette,    label: "Theme",           sub: "Dark / Light / System", color: "text-indigo-600", bg: "bg-indigo-50", path: "/profile/theme" },
+      { id: 'food',    icon: Heart,      label: "Dietary Needs",   sub: "Allergies & preferences", color: "text-rose-600", bg: "bg-rose-50", path: "/profile/preferences" },
     ]
   },
   {
     section: "Support",
     items: [
-      { id: 'help',     icon: HelpCircle, label: "Help & Support", sub: "FAQs, Chat, Tickets", color: "text-teal-600",  bg: "bg-teal-50", isSupport: true },
-      { id: 'feedback', icon: MessageSquare, label: "Share Feedback", sub: "Help us improve",    color: "text-sky-600",   bg: "bg-sky-50" },
-      { id: 'about',    icon: Info,       label: "About Ripple",   sub: "Version 2.1.0",       color: "text-slate-600", bg: "bg-slate-100" },
+      { id: 'help',     icon: HelpCircle, label: "Help & Support", sub: "FAQs, Chat, Tickets", color: "text-teal-600",  bg: "bg-teal-50", path: "/support" },
+      { id: 'feedback', icon: MessageSquare, label: "Share Feedback", sub: "Help us improve",    color: "text-sky-600",   bg: "bg-sky-50", path: "/profile/feedback" },
+      { id: 'about',    icon: Info,       label: "About Ripple",   sub: "Version 2.1.0",       color: "text-slate-600", bg: "bg-slate-100", path: "/profile/about" },
     ]
   },
   {
@@ -77,6 +78,8 @@ export function ProfilePage() {
     if (item.id === 'logout') {
       localStorage.removeItem('ripple_auth');
       navigate('/splash', { replace: true });
+    } else if (item.path) {
+      navigate(item.path);
     } else {
       setOpenFlow(item);
     }
@@ -87,7 +90,7 @@ export function ProfilePage() {
       <div className="flex-1 pb-4">
         {/* ── Profile Header ── */}
         <div className="bg-white px-5 pt-4 pb-6 relative">
-          <button onClick={() => setOpenFlow({ id: 'edit', icon: Edit3, label: 'Edit Profile', sub: '', color: 'text-slate-500', bg: 'bg-slate-100' })}
+          <button onClick={() => navigate('/profile/edit')}
                   className="absolute top-4 right-5 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
             <Edit3 className="w-4 h-4 text-slate-500" />
           </button>
@@ -154,7 +157,7 @@ export function ProfilePage() {
                 <button className="flex-1 py-2 rounded-xl bg-white/20 text-xs font-black text-white backdrop-blur-sm">
                   Redeem Points
                 </button>
-                <button className="flex-1 py-2 rounded-xl bg-white text-xs font-black" style={{ color: BRAND }}>
+                <button onClick={() => navigate('/profile/transactions')} className="flex-1 py-2 rounded-xl bg-white text-xs font-black" style={{ color: BRAND }}>
                   View History
                 </button>
               </div>

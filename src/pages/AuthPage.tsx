@@ -171,9 +171,9 @@ export function AuthPage() {
               <p className="text-sm text-slate-500 font-medium mb-8">We'll send a 6-digit code to verify</p>
 
               {/* Phone input */}
-              <div className="flex items-center gap-2 border-2 border-slate-200 rounded-2xl px-4 py-4 bg-white mb-2 focus-within:border-[#E8431A] transition-colors">
+              <div className="flex items-center gap-2 border-2 border-slate-200 rounded-2xl px-4 py-4 bg-white mb-2 focus-within:border-[#E8431A] transition-colors overflow-hidden">
                 {/* Flag + country code */}
-                <div className="flex items-center gap-1.5 pr-3 border-r border-slate-200">
+                <div className="flex items-center gap-1.5 pr-3 border-r border-slate-200 shrink-0">
                   <span className="text-xl">🇺🇸</span>
                   <span className="text-sm font-black text-slate-900">+1</span>
                 </div>
@@ -183,10 +183,10 @@ export function AuthPage() {
                   onChange={e => { setPhone(formatPhone(e.target.value)); setError('') }}
                   onKeyDown={e => e.key === 'Enter' && handlePhoneSubmit()}
                   placeholder="(555) 000-0000"
-                  className="flex-1 text-[16px] font-bold text-slate-900 bg-transparent outline-none placeholder:text-slate-300"
+                  className="flex-1 min-w-0 text-[16px] font-bold text-slate-900 bg-transparent outline-none placeholder:text-slate-300"
                 />
                 {phone && (
-                  <button onClick={() => setPhone('')}>
+                  <button onClick={() => setPhone('')} className="shrink-0">
                     <X className="w-4 h-4 text-slate-300" />
                   </button>
                 )}
@@ -224,7 +224,7 @@ export function AuthPage() {
               <p className="text-sm text-slate-500 font-medium mb-2">Sent to +1 {phone}</p>
 
               {/* OTP Boxes */}
-              <div className="flex gap-1.5 mt-7 mb-5">
+              <div className="flex justify-between gap-1 mt-7 mb-5 w-full">
                 {otp.map((digit, idx) => (
                   <input
                     key={idx}
@@ -234,7 +234,7 @@ export function AuthPage() {
                     onKeyDown={e => handleOtpKeyDown(e, idx)}
                     type="tel"
                     maxLength={1}
-                    className="otp-box flex-1 h-12 text-center text-xl font-black text-slate-900 bg-slate-50 border-2 border-slate-200 rounded-xl transition-all"
+                    className="otp-box flex-1 min-w-0 h-12 text-center text-xl font-black text-slate-900 bg-slate-50 border-2 border-slate-200 rounded-xl transition-all"
                   />
                 ))}
               </div>

@@ -89,12 +89,12 @@ export function BookingsPage() {
             const count = ALL_BOOKINGS.filter(b => b.status === tab.id).length
             return (
               <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 py-3 text-[11px] font-black border-b-2 transition-colors relative ${
+                className={`flex-1 py-3 text-[11px] font-black border-b-2 transition-colors flex justify-center items-center gap-1.5 ${
                   activeTab === tab.id ? 'text-[#E8431A] border-[#E8431A]' : 'text-slate-400 border-transparent'
                 }`}>
                 {tab.label}
                 {count > 0 && (
-                  <span className="absolute top-2 right-1.5 w-4 h-4 rounded-full text-[9px] font-black text-white flex items-center justify-center"
+                  <span className="w-4 h-4 rounded-full text-[9px] font-black text-white flex items-center justify-center shrink-0"
                         style={{ backgroundColor: activeTab === tab.id ? BRAND : '#CBD5E1' }}>
                     {count}
                   </span>

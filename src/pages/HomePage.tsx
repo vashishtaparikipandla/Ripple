@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Bell, MapPin, Search, Star, Heart, Droplets,
@@ -71,6 +71,7 @@ export function HomePage() {
   const [showDegradation, setShowDeg] = useState(true)
   const [showLevelUp, setShowLevelUp] = useState(true)
   const [levelUpClicked, setLevelUpClicked] = useState(false)
+  const navigate = useNavigate()
 
   const toggleSave = (e: React.MouseEvent, id: string) => {
     e.preventDefault()
@@ -108,32 +109,47 @@ export function HomePage() {
       <div className="px-4 pt-4 space-y-5">
 
         {/* ── Current Booking (Demo Flow) ── */}
-        <Link to="/restaurant/1?demo=gold">
-          <motion.div
-            whileTap={{ scale: 0.98 }}
-            className="bg-white rounded-3xl p-4 border border-slate-200 shadow-sm relative overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
-            <div className="flex justify-between items-start mb-3 relative z-10">
-              <div className="flex items-center gap-1.5 bg-green-100 px-2 py-1 rounded-md mb-1">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" />
-                <span className="text-[10px] font-black text-green-700 uppercase tracking-wider">Current Booking</span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-slate-300" />
+        <motion.div
+          onClick={() => navigate('/restaurant/1?demo=gold')}
+          className="bg-white rounded-3xl p-4 border border-slate-200 shadow-sm relative overflow-hidden cursor-pointer"
+        >
+          <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
+          <div className="flex justify-between items-start mb-3 relative z-10">
+            <div className="flex items-center gap-1.5 bg-green-100 px-2 py-1 rounded-md mb-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" />
+              <span className="text-[10px] font-black text-green-700 uppercase tracking-wider">Current Booking</span>
             </div>
-            <div className="flex gap-3 relative z-10">
-              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=120&h=120&fit=crop" alt="The Rustic Spoon" className="w-14 h-14 rounded-2xl object-cover shrink-0" />
-              <div>
-                <h3 className="font-black text-slate-900 leading-tight">The Rustic Spoon</h3>
-                <p className="text-xs text-slate-500 font-medium mt-0.5">Today at 19:30 · 2 guests</p>
-                <div className="flex items-center gap-1 mt-1.5">
-                  <Droplets className="w-3.5 h-3.5 text-slate-400" />
-                  <span className="text-[11px] font-bold text-slate-600">You're 1 visit away from Gold!</span>
-                </div>
+            <ChevronRight className="w-4 h-4 text-slate-300" />
+          </div>
+          <div className="flex gap-3 relative z-10 mb-4">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=120&h=120&fit=crop" alt="The Rustic Spoon" className="w-14 h-14 rounded-2xl object-cover shrink-0" />
+            <div>
+              <h3 className="font-black text-slate-900 leading-tight">The Rustic Spoon</h3>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">Today at 19:30 · 2 guests</p>
+              <div className="flex items-center gap-1 mt-1.5">
+                <Droplets className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-[11px] font-bold text-slate-600">You're 1 visit away from Gold!</span>
               </div>
             </div>
-          </motion.div>
-        </Link>
+          </div>
+          
+          {/* Action CTAs */}
+          <div className="flex gap-2 relative z-10">
+            <button 
+              onClick={(e) => { e.stopPropagation(); alert('Checked in successfully!') }}
+              className="flex-1 py-2.5 rounded-xl border border-[#E8431A] text-[#E8431A] text-xs font-black bg-[#FEF0EC]"
+            >
+              Check-in
+            </button>
+            <button 
+              onClick={(e) => { e.stopPropagation(); navigate('/restaurant/1?tab=menu') }}
+              className="flex-1 py-2.5 rounded-xl text-white text-xs font-black"
+              style={{ backgroundColor: BRAND }}
+            >
+              Pre-order
+            </button>
+          </div>
+        </motion.div>
 
         {/* ── Degradation Warning Card ── */}
         <AnimatePresence>
