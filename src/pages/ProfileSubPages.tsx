@@ -351,9 +351,12 @@ export function RedeemPointsPage() {
                 <r.icon className="w-5 h-5 text-slate-500" />
                 <p className="text-xs font-semibold text-slate-700">{r.label}</p>
               </div>
-              <button disabled={points < r.pts} className={`px-3 py-1.5 rounded-xl text-xs font-black text-white ${points >= r.pts ? '' : 'opacity-30'}`} style={points >= r.pts ? { backgroundColor: '#E8431A' } : { backgroundColor: '#94a3b8' }}>
-                {r.pts.toLocaleString()} pts
-              </button>
+              <div className="flex flex-col items-end gap-1">
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-wide">{r.pts.toLocaleString()} pts</span>
+                <button disabled={points < r.pts} className={`px-4 py-1.5 rounded-full text-[11px] font-black transition-colors ${points >= r.pts ? 'bg-[#E8431A] text-white hover:bg-[#C0300D] shadow-sm' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}>
+                  Redeem
+                </button>
+              </div>
             </div>
           ))}
         </div>

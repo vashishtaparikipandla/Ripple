@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Search, Filter, Star, Heart, MapPin, X, Droplets } from "lucide-react";
+import { Search, Filter, Star, Heart, MapPin, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -179,9 +179,9 @@ export function RestaurantsPage() {
                     <Heart className={`w-4 h-4 ${saved[rest.id] ? 'fill-rose-500 text-rose-500' : 'text-slate-400'}`} />
                   </button>
                   {rest.tierDiscount && (
-                    <div className={`absolute bottom-3 left-3 flex items-center gap-1 px-2 py-0.5 rounded-full badge-${rest.userTier?.toLowerCase()}`}>
-                      <Droplets className="w-3 h-3 text-white" />
-                      <span className="text-[10px] font-bold text-white">{rest.userTier} · {rest.tierDiscount}% OFF</span>
+                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white shadow-sm border border-slate-100">
+                      <div className={`w-2 h-2 rounded-full badge-${rest.userTier?.toLowerCase()}`} />
+                      <span className="text-[10px] font-black text-slate-800">{rest.userTier} · {rest.tierDiscount}% OFF</span>
                     </div>
                   )}
                 </div>

@@ -474,17 +474,19 @@ export function RestaurantPage() {
 
         {/* Restaurant info */}
         <div className="absolute bottom-0 left-0 right-0 p-4">
-          <h1 className="text-2xl font-black text-white leading-tight">{rest.name}</h1>
+          <div className="flex items-start justify-between">
+            <h1 className="text-2xl font-black text-white leading-tight">{rest.name}</h1>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-md shadow-sm border border-white/10 shrink-0">
+              <div className="w-2 h-2 rounded-full bg-white" />
+              <span className="text-[10px] font-black text-white">Silver</span>
+            </div>
+          </div>
           <div className="flex items-center gap-3 mt-1">
             <span className="text-slate-300 text-xs font-medium">{rest.cuisine}</span>
             <div className="flex items-center gap-1 bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded-full">
               <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
               <span className="text-xs font-black text-white">{rest.rating}</span>
               <span className="text-xs text-slate-300">({rest.reviews})</span>
-            </div>
-            {/* Inline tier callout */}
-            <div className="badge-silver px-2 py-0.5 rounded-full">
-              <span className="text-[10px] font-black text-white">Silver Ripple</span>
             </div>
           </div>
         </div>
@@ -926,8 +928,9 @@ export function RestaurantPage() {
                   <p className="font-bold text-sm">A Silver gift from your friend at</p>
                   <p className="font-black text-lg mt-0.5">{rest.name}</p>
                   <p className="text-white/70 text-xs mt-1">Enjoy 10% off your next visit — valid for one dine-in</p>
-                  <div className="badge-silver inline-flex px-3 py-1 rounded-full mt-3">
-                    <span className="text-[10px] font-black text-white">Silver Ripple · 10% OFF</span>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white shadow-sm mt-3">
+                    <div className="w-2 h-2 rounded-full badge-silver" />
+                    <span className="text-[10px] font-black text-slate-800">Silver Ripple · 10% OFF</span>
                   </div>
                 </div>
 

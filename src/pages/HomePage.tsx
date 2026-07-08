@@ -323,10 +323,15 @@ export function HomePage() {
                 <motion.div whileTap={{ scale: 0.97 }} className="shrink-0 w-52 rounded-3xl overflow-hidden bg-white shadow-sm border border-slate-100">
                   <div className="h-32 relative">
                     <img src={d.image} alt={d.name} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className={`absolute bottom-2.5 left-2.5 px-2.5 py-1 rounded-full text-[10px] font-black text-white ${d.tagCls}`}>
-                      {d.tag}
+                    <div className="absolute top-2.5 right-2.5 flex items-center justify-center w-8 h-8 rounded-full bg-black/40 backdrop-blur-md">
+                      <Heart className="w-4 h-4 text-white" />
                     </div>
+                    {d.tagCls && (
+                      <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white shadow-sm border border-slate-100">
+                        <div className={`w-2 h-2 rounded-full ${d.tagCls}`} />
+                        <span className="text-[10px] font-black text-slate-800">{d.tag}</span>
+                      </div>
+                    )}
                   </div>
                   <div className="p-3">
                     <p className="font-black text-[13px] text-slate-900 truncate">{d.name}</p>
@@ -356,8 +361,9 @@ export function HomePage() {
                   <div className="relative shrink-0">
                     <img src={r.image} alt={r.name} className="w-16 h-16 rounded-2xl object-cover" />
                     {r.tier && (
-                      <div className={`absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full text-[9px] font-black text-white shadow-md badge-${r.tier.toLowerCase()}`}>
-                        {r.tier}
+                      <div className="absolute -bottom-1 -right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-white shadow-md border border-slate-100">
+                        <div className={`w-1.5 h-1.5 rounded-full badge-${r.tier.toLowerCase()}`} />
+                        <span className="text-[8px] font-black text-slate-800">{r.tier}</span>
                       </div>
                     )}
                   </div>
@@ -400,6 +406,146 @@ export function HomePage() {
                   style={{ backgroundColor: t.bg }}>
                   <t.icon className="w-6 h-6" style={{ color: t.color }} />
                   <p className="text-[12px] font-black text-slate-800 leading-tight">{t.label}</p>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── New on Ripple ── */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-black text-slate-900">New on Ripple</h2>
+            <Link to="/restaurants" className="text-xs font-black" style={{ color: BRAND }}>See all</Link>
+          </div>
+          <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2 -mx-5 px-5">
+            {TRENDING.slice().reverse().map(r => (
+              <Link key={`new-${r.id}`} to="/restaurant">
+                <motion.div whileTap={{ scale: 0.96 }} className="w-48 shrink-0 bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm flex flex-col">
+                  <div className="h-28 relative">
+                    <img src={r.image} alt={r.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="p-3">
+                    <h3 className="font-black text-[13px] text-slate-900 truncate">{r.name}</h3>
+                    <p className="text-[11px] text-slate-500 font-medium truncate mt-0.5">{r.cuisine}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span className="text-[10px] font-black text-slate-800">{r.rating}</span>
+                      </div>
+                      <span className="text-slate-300">·</span>
+                      <span className="text-[10px] text-slate-400 font-semibold">{r.dist}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Hidden Gems ── */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-black text-slate-900">Hidden Gems</h2>
+            <Link to="/restaurants" className="text-xs font-black" style={{ color: BRAND }}>See all</Link>
+          </div>
+          <div className="space-y-3">
+            {TRENDING.slice(1, 3).map(r => (
+              <Link key={`gem-${r.id}`} to={`/restaurant/${r.id}`}>
+                <motion.div whileTap={{ scale: 0.98 }} className="bg-white rounded-3xl flex items-center gap-3 p-3 border border-slate-100 shadow-sm">
+                  <div className="relative shrink-0">
+                    <img src={r.image} alt={r.name} className="w-16 h-16 rounded-2xl object-cover" />
+                    {r.tier && (
+                      <div className="absolute -bottom-1 -right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-white shadow-md border border-slate-100">
+                        <div className={`w-1.5 h-1.5 rounded-full badge-${r.tier.toLowerCase()}`} />
+                        <span className="text-[8px] font-black text-slate-800">{r.tier}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-black text-[14px] text-slate-900 truncate">{r.name}</p>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span className="text-xs font-black text-slate-800">{r.rating}</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">{r.cuisine}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <MapPin className="w-3 h-3 text-slate-400" />
+                      <span className="text-[11px] text-slate-400 font-semibold">{r.dist}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Fast Casual ── */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-black text-slate-900">Fast Casual</h2>
+            <Link to="/restaurants" className="text-xs font-black" style={{ color: BRAND }}>See all</Link>
+          </div>
+          <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2 -mx-5 px-5">
+            {TRENDING.slice(0, 3).map(r => (
+              <Link key={`fast-${r.id}`} to="/restaurant">
+                <motion.div whileTap={{ scale: 0.96 }} className="w-48 shrink-0 bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm flex flex-col">
+                  <div className="h-28 relative">
+                    <img src={r.image} alt={r.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="p-3">
+                    <h3 className="font-black text-[13px] text-slate-900 truncate">{r.name}</h3>
+                    <p className="text-[11px] text-slate-500 font-medium truncate mt-0.5">{r.cuisine}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span className="text-[10px] font-black text-slate-800">{r.rating}</span>
+                      </div>
+                      <span className="text-slate-300">·</span>
+                      <span className="text-[10px] text-slate-400 font-semibold">{r.dist}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Late Night Bites ── */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-black text-slate-900">Late Night Bites</h2>
+            <Link to="/restaurants" className="text-xs font-black" style={{ color: BRAND }}>See all</Link>
+          </div>
+          <div className="space-y-3">
+            {TRENDING.slice(2, 4).map(r => (
+              <Link key={`late-${r.id}`} to={`/restaurant/${r.id}`}>
+                <motion.div whileTap={{ scale: 0.98 }} className="bg-white rounded-3xl flex items-center gap-3 p-3 border border-slate-100 shadow-sm">
+                  <div className="relative shrink-0">
+                    <img src={r.image} alt={r.name} className="w-16 h-16 rounded-2xl object-cover" />
+                    {r.tier && (
+                      <div className="absolute -bottom-1 -right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-white shadow-md border border-slate-100">
+                        <div className={`w-1.5 h-1.5 rounded-full badge-${r.tier.toLowerCase()}`} />
+                        <span className="text-[8px] font-black text-slate-800">{r.tier}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-black text-[14px] text-slate-900 truncate">{r.name}</p>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span className="text-xs font-black text-slate-800">{r.rating}</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">{r.cuisine}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <MapPin className="w-3 h-3 text-slate-400" />
+                      <span className="text-[11px] text-slate-400 font-semibold">{r.dist}</span>
+                    </div>
+                  </div>
                 </motion.div>
               </Link>
             ))}
