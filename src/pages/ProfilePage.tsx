@@ -129,35 +129,30 @@ export function ProfilePage() {
           </div>
         </div>
 
-        {/* ── Ripple Wallet Card ── */}
-        <div className="px-4 -mt-2 mb-4">
-          <div className="rounded-3xl p-5 text-white shadow-xl relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #E8431A, #C0300D)', boxShadow: '0 20px 25px -5px rgba(232,67,26,0.3)' }}>
-            <div className="absolute -top-6 -right-6 w-28 h-28 bg-white/10 rounded-full blur-lg" />
-            <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-full" />
-
-            <div className="relative">
-              <div className="flex justify-between items-start mb-4">
-                <div>
         {/* ── Ripple Points Banner ── */}
-        <div className="mx-4 mb-4 mt-4 rounded-3xl p-4"
-             style={{ background: 'linear-gradient(135deg, #E8431A, #C0300D)' }}>
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
-              <Droplets className="w-6 h-6 text-white" />
+        <div className="mx-4 mb-4 mt-4 rounded-3xl p-4 relative overflow-hidden shadow-xl"
+             style={{ background: 'linear-gradient(135deg, #E8431A, #C0300D)', boxShadow: '0 20px 25px -5px rgba(232,67,26,0.3)' }}>
+          <div className="absolute -top-6 -right-6 w-28 h-28 bg-white/10 rounded-full blur-lg" />
+          <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-white/5 rounded-full" />
+          <div className="relative">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+                <Droplets className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <p className="text-white/70 text-[10px] font-black uppercase tracking-wider">Ripple Points</p>
+                <p className="text-white text-2xl font-black leading-tight">{USER.points.toLocaleString()} <span className="text-base font-bold opacity-70">pts</span></p>
+                <p className="text-white/60 text-[10px] font-semibold">≈ ${(USER.points / 100).toFixed(2)} value</p>
+              </div>
             </div>
-            <div className="flex-1">
-              <p className="text-white/70 text-[10px] font-black uppercase tracking-wider">Ripple Points</p>
-              <p className="text-white text-2xl font-black leading-tight">{USER.points.toLocaleString()} <span className="text-base font-bold opacity-70">pts</span></p>
-              <p className="text-white/60 text-[10px] font-semibold">≈ ${(USER.points / 100).toFixed(2)} value</p>
+            <div className="flex gap-2">
+              <Link to="/profile/earn" className="flex-1 bg-white/10 hover:bg-white/20 transition-colors py-2.5 rounded-xl text-center text-xs font-black text-white">
+                How to Earn
+              </Link>
+              <Link to="/profile/redeem" className="flex-1 bg-white hover:bg-slate-50 transition-colors py-2.5 rounded-xl text-center text-xs font-black" style={{ color: BRAND }}>
+                Redeem
+              </Link>
             </div>
-          </div>
-          <div className="flex gap-2">
-            <Link to="/profile/earn" className="flex-1 bg-white/10 hover:bg-white/20 transition-colors py-2.5 rounded-xl text-center text-xs font-black text-white">
-              How to Earn
-            </Link>
-            <Link to="/profile/redeem" className="flex-1 bg-white hover:bg-slate-50 transition-colors py-2.5 rounded-xl text-center text-xs font-black" style={{ color: BRAND }}>
-              Redeem
-            </Link>
           </div>
         </div>
 
