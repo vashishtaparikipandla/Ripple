@@ -327,9 +327,8 @@ export function HomePage() {
                       <Heart className="w-4 h-4 text-white" />
                     </div>
                     {d.tagCls && (
-                      <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white shadow-sm border border-slate-100">
-                        <div className={`w-2 h-2 rounded-full ${d.tagCls}`} />
-                        <span className="text-[10px] font-black text-slate-800">{d.tag}</span>
+                      <div className={`absolute bottom-2.5 left-2.5 px-2.5 py-1 rounded-full text-[10px] font-black text-white ${d.tagCls}`}>
+                        {d.tag}
                       </div>
                     )}
                   </div>
@@ -361,9 +360,8 @@ export function HomePage() {
                   <div className="relative shrink-0">
                     <img src={r.image} alt={r.name} className="w-16 h-16 rounded-2xl object-cover" />
                     {r.tier && (
-                      <div className="absolute -bottom-1 -right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-white shadow-md border border-slate-100">
-                        <div className={`w-1.5 h-1.5 rounded-full badge-${r.tier.toLowerCase()}`} />
-                        <span className="text-[8px] font-black text-slate-800">{r.tier}</span>
+                      <div className={`absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full text-[9px] font-black text-white shadow-md badge-${r.tier.toLowerCase()}`}>
+                        {r.tier}
                       </div>
                     )}
                   </div>
@@ -456,9 +454,8 @@ export function HomePage() {
                   <div className="relative shrink-0">
                     <img src={r.image} alt={r.name} className="w-16 h-16 rounded-2xl object-cover" />
                     {r.tier && (
-                      <div className="absolute -bottom-1 -right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-white shadow-md border border-slate-100">
-                        <div className={`w-1.5 h-1.5 rounded-full badge-${r.tier.toLowerCase()}`} />
-                        <span className="text-[8px] font-black text-slate-800">{r.tier}</span>
+                      <div className={`absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full text-[9px] font-black text-white shadow-md badge-${r.tier.toLowerCase()}`}>
+                        {r.tier}
                       </div>
                     )}
                   </div>
@@ -526,9 +523,8 @@ export function HomePage() {
                   <div className="relative shrink-0">
                     <img src={r.image} alt={r.name} className="w-16 h-16 rounded-2xl object-cover" />
                     {r.tier && (
-                      <div className="absolute -bottom-1 -right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-white shadow-md border border-slate-100">
-                        <div className={`w-1.5 h-1.5 rounded-full badge-${r.tier.toLowerCase()}`} />
-                        <span className="text-[8px] font-black text-slate-800">{r.tier}</span>
+                      <div className={`absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full text-[9px] font-black text-white shadow-md badge-${r.tier.toLowerCase()}`}>
+                        {r.tier}
                       </div>
                     )}
                   </div>

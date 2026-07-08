@@ -110,21 +110,25 @@ export function ProfilePage() {
           </div>
 
           <div className="grid grid-cols-4 gap-2">
-            <Link to="/profile/tier/platinum" className="badge-platinum rounded-2xl p-3 text-center flex flex-col items-center justify-center transition-transform active:scale-95">
-              <p className="text-base font-black">0</p>
-              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide opacity-80">Plat</p>
+            <Link to="/profile/tier/platinum" className="bg-white border border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center transition-transform active:scale-95 shadow-sm relative overflow-hidden">
+              <div className="absolute top-2 right-2 w-2 h-2 rounded-full badge-platinum" />
+              <p className="text-base font-black text-slate-900">0</p>
+              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide text-slate-500">Plat</p>
             </Link>
-            <Link to="/profile/tier/gold" className="badge-gold rounded-2xl p-3 text-center flex flex-col items-center justify-center transition-transform active:scale-95">
-              <p className="text-base font-black">2</p>
-              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide opacity-80">Gold</p>
+            <Link to="/profile/tier/gold" className="bg-white border border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center transition-transform active:scale-95 shadow-sm relative overflow-hidden">
+              <div className="absolute top-2 right-2 w-2 h-2 rounded-full badge-gold" />
+              <p className="text-base font-black text-slate-900">2</p>
+              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide text-slate-500">Gold</p>
             </Link>
-            <Link to="/profile/tier/silver" className="badge-silver rounded-2xl p-3 text-center flex flex-col items-center justify-center transition-transform active:scale-95 text-white">
-              <p className="text-base font-black">5</p>
-              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide opacity-80">Silver</p>
+            <Link to="/profile/tier/silver" className="bg-white border border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center transition-transform active:scale-95 shadow-sm relative overflow-hidden">
+              <div className="absolute top-2 right-2 w-2 h-2 rounded-full badge-silver" />
+              <p className="text-base font-black text-slate-900">5</p>
+              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide text-slate-500">Silver</p>
             </Link>
-            <Link to="/profile/tier/bronze" className="badge-bronze rounded-2xl p-3 text-center flex flex-col items-center justify-center transition-transform active:scale-95 text-white">
-              <p className="text-base font-black">12</p>
-              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide opacity-80">Bronze</p>
+            <Link to="/profile/tier/bronze" className="bg-white border border-slate-100 rounded-2xl p-3 flex flex-col items-center justify-center transition-transform active:scale-95 shadow-sm relative overflow-hidden">
+              <div className="absolute top-2 right-2 w-2 h-2 rounded-full badge-bronze" />
+              <p className="text-base font-black text-slate-900">12</p>
+              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide text-slate-500">Bronze</p>
             </Link>
           </div>
         </div>
