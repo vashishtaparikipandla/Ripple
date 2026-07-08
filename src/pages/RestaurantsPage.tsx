@@ -163,11 +163,13 @@ export function RestaurantsPage() {
                 className="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm mb-4"
               >
                 <div className="h-40 relative">
-                  <img src={rest.image} alt={rest.name} className={`w-full h-full object-cover ${rest.isOpen ? '' : 'grayscale opacity-80'}`} />
+                  <img src={rest.image} alt={rest.name} className={`w-full h-full object-cover ${rest.isOpen ? '' : 'grayscale opacity-60'}`} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   {!rest.isOpen && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-black backdrop-blur-md tracking-wide">CLOSED</span>
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/20 backdrop-blur-[2px]">
+                      <span className="bg-white/90 text-slate-900 px-3 py-1.5 rounded-xl text-[10px] font-black shadow-sm tracking-wide uppercase flex items-center gap-1">
+                        CURRENTLY OFFLINE
+                      </span>
                     </div>
                   )}
                   <button

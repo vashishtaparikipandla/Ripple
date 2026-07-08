@@ -117,9 +117,9 @@ const RESTAURANT = {
     'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&q=80&w=400',
   ],
   userReviews: [
-    { id: 1, author: 'Sarah M.', avatar: 'https://i.pravatar.cc/80?u=1',  rating: 5, text: 'Amazing experience! The steak was cooked to perfection.', date: '2 days ago' },
-    { id: 2, author: 'John D.',  avatar: 'https://i.pravatar.cc/80?u=2',  rating: 4, text: 'Great atmosphere and food. Loved the truffle fries!', date: '1 week ago' },
-    { id: 3, author: 'Mia K.',   avatar: 'https://i.pravatar.cc/80?u=3',  rating: 5, text: 'Perfect anniversary dinner. Highly recommend the salmon!', date: '2 weeks ago' },
+    { id: 1, author: 'Sarah M.', avatar: 'https://i.pravatar.cc/80?u=1',  rating: 5, text: 'Amazing experience! The steak was cooked to perfection.', date: '2 days ago', images: ['https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop'] },
+    { id: 2, author: 'John D.',  avatar: 'https://i.pravatar.cc/80?u=2',  rating: 4, text: 'Great atmosphere and food. Loved the truffle fries!', date: '1 week ago', images: [] },
+    { id: 3, author: 'Mia K.',   avatar: 'https://i.pravatar.cc/80?u=3',  rating: 5, text: 'Perfect anniversary dinner. Highly recommend the salmon!', date: '2 weeks ago', images: ['https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&h=200&fit=crop', 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=200&h=200&fit=crop'] },
   ],
   offers: [
     { tier: 'Bronze' as Tier, perk: '5% Off Total Bill',                   visitsNeeded: 2,  unlocked: true  },
@@ -406,6 +406,7 @@ export function RestaurantPage() {
   const [selectedTime, setSelectedTime] = useState('')
   const [guestCount, setGuestCount]   = useState(2)
   const [bookingConfirmed, setBookingConfirmed] = useState(false)
+  const [hasBooked, setHasBooked] = useState(false)
   const [isSaved, setIsSaved]         = useState(false)
   const [showHoldGold, setShowHoldGold] = useState(false)
   
@@ -417,7 +418,8 @@ export function RestaurantPage() {
 
   const handleBook = () => {
     if (!selectedTime) return
-    setTimeout(() => { setBookingConfirmed(true); setTimeout(() => { setBookingConfirmed(false); setShowBooking(false) }, 2000) }, 600)
+    setHasBooked(true)
+    setTimeout(() => { setBookingConfirmed(true) }, 600)
   }
 
   const handleTabClick = (tabId: Tab) => {
@@ -684,6 +686,13 @@ export function RestaurantPage() {
                     </div>
                   </div>
                   <p className="text-sm text-slate-600 leading-relaxed font-medium">{review.text}</p>
+                  {review.images && review.images.length > 0 && (
+                    <div className="flex gap-2 mt-3 overflow-x-auto pb-1 hide-scrollbar">
+                      {review.images.map((img, idx) => (
+                        <img key={idx} src={img} alt="Review photo" className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-100" />
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </motion.div>
@@ -771,6 +780,15 @@ export function RestaurantPage() {
             <span>Closed Now</span>
             <span className="text-[10px] font-semibold opacity-70">Reopens Tomorrow</span>
           </div>
+        ) : hasBooked ? (
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            onClick={() => setActiveTab('menu')}
+            className="flex-1 rounded-2xl text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg"
+            style={{ backgroundColor: BRAND }}
+          >
+            Pre-order Food
+          </motion.button>
         ) : (
           <motion.button
             whileTap={{ scale: 0.97 }}
@@ -807,9 +825,14 @@ export function RestaurantPage() {
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
                     <CheckCircle className="w-8 h-8 text-green-600" />
                   </div>
-                  <div className="text-center">
+                  <div className="text-center w-full px-5">
                     <p className="font-black text-lg text-slate-900">Booking Confirmed!</p>
-                    <p className="text-sm text-slate-500 mt-1">See you {selectedDate} at {selectedTime}</p>
+                    <p className="text-sm text-slate-500 mt-1 mb-8">See you {selectedDate} at {selectedTime}</p>
+                    
+                    <div className="flex gap-3">
+                      <button onClick={() => { setShowBooking(false); setBookingConfirmed(false); }} className="flex-1 py-3.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 bg-white">Close</button>
+                      <button onClick={() => { setShowBooking(false); setBookingConfirmed(false); setActiveTab('menu'); }} className="flex-1 py-3.5 rounded-xl text-sm font-bold text-white shadow-lg" style={{ backgroundColor: BRAND }}>Pre-order Food</button>
+                    </div>
                   </div>
                 </div>
               ) : (

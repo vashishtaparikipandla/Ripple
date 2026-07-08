@@ -19,7 +19,8 @@ import { TierStatusPage }     from '@/pages/TierStatusPage'
 import { 
   FoodPreferencesPage, TransactionHistoryPage, SavedPlacesPage, 
   SharedDiscountsPage, NotificationSettingsPage, ThemeSettingsPage, 
-  FeedbackPage, AboutPage, AddressesPage 
+  FeedbackPage, AboutPage, AddressesPage, PaymentMethodsPage,
+  HowToEarnPage, RedeemPointsPage
 } from '@/pages/ProfileSubPages'
 
 export const router = createHashRouter([
@@ -48,6 +49,9 @@ export const router = createHashRouter([
   { path: '/profile/feedback',  element: <AppLayout><FeedbackPage /></AppLayout> },
   { path: '/profile/about',     element: <AppLayout><AboutPage /></AppLayout> },
   { path: '/profile/addresses', element: <AppLayout><AddressesPage /></AppLayout> },
+  { path: '/profile/payment',   element: <AppLayout><PaymentMethodsPage /></AppLayout> },
+  { path: '/profile/earn',      element: <AppLayout><HowToEarnPage /></AppLayout> },
+  { path: '/profile/redeem',    element: <AppLayout><RedeemPointsPage /></AppLayout> },
   { path: '/profile/tier/:tier', element: <AppLayout><TierStatusPage /></AppLayout> },
   { path: '/support',           element: <AppLayout><SupportPage /></AppLayout> },
   { path: '/notifications',     element: <AppLayout><NotificationsPage /></AppLayout> },

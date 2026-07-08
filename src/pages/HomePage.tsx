@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -33,6 +33,11 @@ const TRENDING = [
   { id: '2', name: 'Sushi Nami',       cuisine: 'Japanese',        rating: 4.9, dist: '1.2 mi', isSaved: false, tier: null,     image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=120&h=120&fit=crop' },
   { id: '3', name: 'Bloom Bistro',     cuisine: 'French',          rating: 4.7, dist: '2.1 mi', isSaved: false, tier: 'Bronze', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=120&h=120&fit=crop' },
   { id: '4', name: 'Rooftop Garden',   cuisine: 'Contemporary',    rating: 4.6, dist: '0.5 mi', isSaved: false, tier: null,     image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=120&h=120&fit=crop' },
+]
+
+const CURATED = [
+  { id: 1, title: 'Top 10 Romantic Spots', subtitle: 'Perfect for date night', image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=400&h=200&fit=crop' },
+  { id: 2, title: 'Best Asian Fusion', subtitle: 'Spice up your week', image: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=400&h=200&fit=crop' },
 ]
 
 function Confetti() {
@@ -72,6 +77,23 @@ export function HomePage() {
   const [showLevelUp, setShowLevelUp] = useState(true)
   const [levelUpClicked, setLevelUpClicked] = useState(false)
   const navigate = useNavigate()
+  const scrollRef = React.useRef<HTMLDivElement>(null)
+
+  // Auto-scroll logic for carousel
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current
+        const maxScroll = scrollWidth - clientWidth
+        if (scrollLeft >= maxScroll - 10) {
+          scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' })
+        } else {
+          scrollRef.current.scrollBy({ left: clientWidth * 0.85, behavior: 'smooth' })
+        }
+      }
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [])
 
   const toggleSave = (e: React.MouseEvent, id: string) => {
     e.preventDefault()
@@ -108,146 +130,158 @@ export function HomePage() {
 
       <div className="px-4 pt-4 space-y-5">
 
-        {/* ── Current Booking (Demo Flow) ── */}
-        <motion.div
-          onClick={() => navigate('/restaurant/1?demo=gold')}
-          className="bg-white rounded-3xl p-4 border border-slate-200 shadow-sm relative overflow-hidden cursor-pointer"
+        {/* ── Top Carousel ── */}
+        <div 
+          ref={scrollRef}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-2"
         >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
-          <div className="flex justify-between items-start mb-3 relative z-10">
-            <div className="flex items-center gap-1.5 bg-green-100 px-2 py-1 rounded-md mb-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" />
-              <span className="text-[10px] font-black text-green-700 uppercase tracking-wider">Current Booking</span>
-            </div>
-            <ChevronRight className="w-4 h-4 text-slate-300" />
+          {/* Slide 1: Current Booking */}
+          <div className="shrink-0 w-[85%] snap-center">
+            <motion.div
+              onClick={() => navigate('/restaurant/1?demo=gold')}
+              className="bg-white rounded-3xl p-4 border border-slate-200 shadow-sm relative overflow-hidden cursor-pointer h-full flex flex-col"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
+              <div className="flex justify-between items-start mb-3 relative z-10">
+                <div className="flex items-center gap-1.5 bg-green-100 px-2 py-1 rounded-md mb-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" />
+                  <span className="text-[10px] font-black text-green-700 uppercase tracking-wider">Current Booking</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-300" />
+              </div>
+              <div className="flex gap-3 relative z-10 mb-4 flex-1">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=120&h=120&fit=crop" alt="The Rustic Spoon" className="w-14 h-14 rounded-2xl object-cover shrink-0" />
+                <div>
+                  <h3 className="font-black text-slate-900 leading-tight">The Rustic Spoon</h3>
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">Today at 19:30 · 2 guests</p>
+                  <div className="flex items-center gap-1 mt-1.5">
+                    <Droplets className="w-3.5 h-3.5 text-slate-400" />
+                    <span className="text-[11px] font-bold text-slate-600">1 visit away from Gold!</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Action CTAs */}
+              <div className="flex gap-2 relative z-10 mt-auto">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); alert('Checked in successfully!') }}
+                  className="flex-1 py-2.5 rounded-xl border border-[#E8431A] text-[#E8431A] text-xs font-black bg-[#FEF0EC]"
+                >
+                  Check-in
+                </button>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); navigate('/restaurant/1?tab=menu') }}
+                  className="flex-1 py-2.5 rounded-xl text-white text-xs font-black"
+                  style={{ backgroundColor: BRAND }}
+                >
+                  Pre-order
+                </button>
+              </div>
+            </motion.div>
           </div>
-          <div className="flex gap-3 relative z-10 mb-4">
-            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=120&h=120&fit=crop" alt="The Rustic Spoon" className="w-14 h-14 rounded-2xl object-cover shrink-0" />
-            <div>
-              <h3 className="font-black text-slate-900 leading-tight">The Rustic Spoon</h3>
-              <p className="text-xs text-slate-500 font-medium mt-0.5">Today at 19:30 · 2 guests</p>
-              <div className="flex items-center gap-1 mt-1.5">
-                <Droplets className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-[11px] font-bold text-slate-600">You're 1 visit away from Gold!</span>
+
+          {/* Slide 2: Degradation Warning Card */}
+          <AnimatePresence>
+            {showDegradation && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: '85%' }}
+                exit={{ opacity: 0, width: 0 }}
+                className="shrink-0 snap-center overflow-hidden"
+              >
+                <Link to="/restaurant/1" className="block h-full">
+                  <div className="rounded-3xl p-4 border border-[#E8431A]/20 relative overflow-hidden h-full flex flex-col justify-center"
+                       style={{ background: 'linear-gradient(135deg, #FEF0EC, #FFF)' }}>
+                    <button
+                      onClick={e => { e.preventDefault(); setShowDeg(false) }}
+                      className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center"
+                    >
+                      <X className="w-3.5 h-3.5 text-slate-400" />
+                    </button>
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0"
+                           style={{ backgroundColor: '#E8431A' }}>
+                        <AlertTriangle className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1 pr-6">
+                        <p className="text-sm font-black text-slate-900 leading-tight">Your Gold is fading at The Rustic Spoon</p>
+                        <p className="text-[11px] text-slate-500 font-medium mt-1 leading-tight">
+                          Visit within 3 days or share with a friend to keep your Gold status.
+                        </p>
+                        <div className="flex items-center gap-1 mt-2" style={{ color: BRAND }}>
+                          <span className="text-[11px] font-black">Tap to hold your Gold</span>
+                          <ChevronRight className="w-3 h-3" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Slide 3: Level Up Congratulations Card */}
+          <AnimatePresence>
+            {showLevelUp && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: '85%' }}
+                exit={{ opacity: 0, width: 0 }}
+                className="shrink-0 snap-center overflow-hidden"
+              >
+                <Link to="/restaurant/2" className="block h-full">
+                  <motion.div
+                    onClick={() => setLevelUpClicked(true)}
+                    className="rounded-3xl p-4 relative overflow-hidden h-full flex flex-col justify-center"
+                    style={{ background: 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)' }}
+                  >
+                    {levelUpClicked && <Confetti />}
+                    <button
+                      onClick={e => { e.preventDefault(); setShowLevelUp(false) }}
+                      className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center z-10"
+                    >
+                      <X className="w-3.5 h-3.5 text-white/60" />
+                    </button>
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-2xl badge-silver flex items-center justify-center shrink-0">
+                        <Award className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1 pr-6">
+                        <p className="text-sm font-black text-white leading-tight">You've Rippled to Silver! 🎉</p>
+                        <p className="text-[11px] text-white/60 font-medium mt-1 leading-tight">
+                          5 visits to Sushi Nami this month. Unlock 10% off + free soft drink.
+                        </p>
+                        <div className="flex items-center gap-1 mt-2 text-amber-400">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span className="text-[11px] font-black">View your new Ripple status</span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Slide 4: Ripple Points Banner */}
+          <div className="shrink-0 w-[85%] snap-center">
+            <div className="rounded-3xl p-4 flex flex-col justify-center gap-4 h-full"
+                 style={{ background: 'linear-gradient(135deg, #E8431A, #C0300D)' }}>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+                  <Droplets className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-white/70 text-[10px] font-black uppercase tracking-wider">Ripple Points</p>
+                  <p className="text-white text-2xl font-black leading-tight">1,250 <span className="text-base font-bold opacity-70">pts</span></p>
+                  <p className="text-white/60 text-[10px] font-semibold">≈ $12.50 value</p>
+                </div>
+                <Link to="/profile/redeem" className="px-4 py-2 bg-white rounded-xl text-xs font-black" style={{ color: BRAND }}>
+                  Redeem
+                </Link>
               </div>
             </div>
           </div>
-          
-          {/* Action CTAs */}
-          <div className="flex gap-2 relative z-10">
-            <button 
-              onClick={(e) => { e.stopPropagation(); alert('Checked in successfully!') }}
-              className="flex-1 py-2.5 rounded-xl border border-[#E8431A] text-[#E8431A] text-xs font-black bg-[#FEF0EC]"
-            >
-              Check-in
-            </button>
-            <button 
-              onClick={(e) => { e.stopPropagation(); navigate('/restaurant/1?tab=menu') }}
-              className="flex-1 py-2.5 rounded-xl text-white text-xs font-black"
-              style={{ backgroundColor: BRAND }}
-            >
-              Pre-order
-            </button>
-          </div>
-        </motion.div>
-
-        {/* ── Degradation Warning Card ── */}
-        <AnimatePresence>
-          {showDegradation && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
-            >
-              <Link to="/restaurant/1">
-                <div className="rounded-3xl p-4 border border-[#E8431A]/20 relative overflow-hidden"
-                     style={{ background: 'linear-gradient(135deg, #FEF0EC, #FFF)' }}>
-                  <button
-                    onClick={e => { e.preventDefault(); setShowDeg(false) }}
-                    className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/80 flex items-center justify-center"
-                  >
-                    <X className="w-3.5 h-3.5 text-slate-400" />
-                  </button>
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0"
-                         style={{ backgroundColor: '#E8431A' }}>
-                      <AlertTriangle className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1 pr-6">
-                      <p className="text-sm font-black text-slate-900">Your Gold is fading at The Rustic Spoon</p>
-                      <p className="text-[11px] text-slate-500 font-medium mt-1">
-                        Visit within 3 days or share with a friend to keep your Gold Ripple status.
-                      </p>
-                      <div className="flex items-center gap-1 mt-2" style={{ color: BRAND }}>
-                        <span className="text-[11px] font-black">Tap to hold your Gold</span>
-                        <ChevronRight className="w-3 h-3" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* ── Level Up Congratulations Card ── */}
-        <AnimatePresence>
-          {showLevelUp && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="overflow-hidden"
-            >
-              <Link to="/restaurant/2">
-                <motion.div
-                  onClick={() => setLevelUpClicked(true)}
-                  className="rounded-3xl p-4 relative overflow-hidden"
-                  style={{ background: 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)' }}
-                >
-                  {levelUpClicked && <Confetti />}
-                  <button
-                    onClick={e => { e.preventDefault(); setShowLevelUp(false) }}
-                    className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center z-10"
-                  >
-                    <X className="w-3.5 h-3.5 text-white/60" />
-                  </button>
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-2xl badge-silver flex items-center justify-center shrink-0">
-                      <Award className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1 pr-6">
-                      <p className="text-sm font-black text-white">You've Rippled to Silver! 🎉</p>
-                      <p className="text-[11px] text-white/60 font-medium mt-1">
-                        5 visits to Sushi Nami this month. Unlock 10% off + free soft drink.
-                      </p>
-                      <div className="flex items-center gap-1 mt-2 text-amber-400">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span className="text-[11px] font-black">View your new Ripple status</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* ── Ripple Points Banner ── */}
-        <div className="rounded-3xl p-4 flex items-center gap-4"
-             style={{ background: 'linear-gradient(135deg, #E8431A, #C0300D)' }}>
-          <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
-            <Droplets className="w-6 h-6 text-white" />
-          </div>
-          <div className="flex-1">
-            <p className="text-white/70 text-[10px] font-black uppercase tracking-wider">Ripple Points</p>
-            <p className="text-white text-2xl font-black leading-tight">1,250 <span className="text-base font-bold opacity-70">pts</span></p>
-            <p className="text-white/60 text-[10px] font-semibold">≈ $12.50 value</p>
-          </div>
-          <Link to="/profile" className="px-4 py-2 bg-white rounded-xl text-xs font-black" style={{ color: BRAND }}>
-            Redeem
-          </Link>
         </div>
 
         {/* ── USP Tagline ── */}
@@ -370,6 +404,32 @@ export function HomePage() {
               </Link>
             ))}
           </div>
+        </div>
+
+        {/* ── Curated For You ── */}
+        <div>
+          <h2 className="text-lg font-black text-slate-900 mb-3">Curated for you</h2>
+          <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-1">
+            {CURATED.map(c => (
+              <Link key={c.id} to="/restaurants">
+                <motion.div whileTap={{ scale: 0.97 }} className="shrink-0 w-64 rounded-3xl overflow-hidden shadow-sm relative h-36">
+                  <img src={c.image} alt={c.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <p className="font-black text-white text-lg leading-tight">{c.title}</p>
+                    <p className="text-[11px] text-white/80 font-medium mt-0.5">{c.subtitle}</p>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Daily Food Quote ── */}
+        <div className="py-6 px-4 text-center pb-24">
+          <p className="text-xl font-black text-slate-300">"</p>
+          <p className="text-sm font-semibold text-slate-500 italic mt-1 leading-relaxed">People who love to eat are always the best people.</p>
+          <p className="text-xs font-black text-slate-400 mt-2 uppercase tracking-widest">— Julia Child</p>
         </div>
 
       </div>

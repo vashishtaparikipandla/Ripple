@@ -176,9 +176,9 @@ export function BookingsPage() {
                     {/* Actions */}
                     {(booking.status === 'active' || booking.status === 'upcoming') && (
                       <div className="flex gap-2 mb-2">
-                        <button onClick={() => openModify(booking)}
+                        <button 
                           className="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 flex items-center justify-center gap-1">
-                          <Clock className="w-3.5 h-3.5" /> Modify
+                          <MapPin className="w-3.5 h-3.5" /> Check-in
                         </button>
                         <button className="flex-1 py-2.5 rounded-xl text-xs font-bold text-white flex items-center justify-center gap-1"
                                 style={{ backgroundColor: BRAND }}>
@@ -249,14 +249,13 @@ export function BookingsPage() {
                     <button onClick={() => {
                       setSupportBooking(null);
                       if (supportBooking.status === 'active' || supportBooking.status === 'upcoming') {
-                        setModifyBooking(supportBooking);
-                        setModifyStep('cancel-reason');
+                        openModify(supportBooking);
                       }
                     }} className="w-full flex items-center gap-3 bg-white border border-slate-200 p-4 rounded-2xl active:bg-slate-50 transition-colors text-left">
-                      <X className="w-5 h-5 text-rose-500" />
+                      <Clock className="w-5 h-5 text-slate-600" />
                       <div>
-                        <p className="text-sm font-bold text-slate-900">Cancel Booking</p>
-                        <p className="text-xs text-slate-500 font-medium mt-0.5">Release your table and cancel</p>
+                        <p className="text-sm font-bold text-slate-900">Modify Booking</p>
+                        <p className="text-xs text-slate-500 font-medium mt-0.5">Reschedule or cancel your table</p>
                       </div>
                     </button>
                   )}

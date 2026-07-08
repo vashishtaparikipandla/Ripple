@@ -109,18 +109,22 @@ export function ProfilePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            <Link to="/profile/tier/gold" className="bg-amber-50 rounded-2xl p-3 text-center border border-amber-100 flex flex-col items-center justify-center transition-transform active:scale-95">
-              <p className="text-lg font-black text-amber-700">2</p>
-              <p className="text-[10px] text-amber-600 font-bold mt-0.5 uppercase tracking-wide">Gold</p>
+          <div className="grid grid-cols-4 gap-2">
+            <Link to="/profile/tier/platinum" className="badge-platinum rounded-2xl p-3 text-center flex flex-col items-center justify-center transition-transform active:scale-95">
+              <p className="text-base font-black">0</p>
+              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide opacity-80">Plat</p>
             </Link>
-            <Link to="/profile/tier/silver" className="bg-slate-50 rounded-2xl p-3 text-center border border-slate-200 flex flex-col items-center justify-center transition-transform active:scale-95">
-              <p className="text-lg font-black text-slate-700">5</p>
-              <p className="text-[10px] text-slate-500 font-bold mt-0.5 uppercase tracking-wide">Silver</p>
+            <Link to="/profile/tier/gold" className="badge-gold rounded-2xl p-3 text-center flex flex-col items-center justify-center transition-transform active:scale-95">
+              <p className="text-base font-black">2</p>
+              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide opacity-80">Gold</p>
             </Link>
-            <Link to="/profile/tier/bronze" className="bg-[#FEF0EC] rounded-2xl p-3 text-center border border-[#E8431A]/20 flex flex-col items-center justify-center transition-transform active:scale-95">
-              <p className="text-lg font-black" style={{ color: BRAND }}>12</p>
-              <p className="text-[10px] font-bold mt-0.5 uppercase tracking-wide" style={{ color: BRAND }}>Bronze</p>
+            <Link to="/profile/tier/silver" className="badge-silver rounded-2xl p-3 text-center flex flex-col items-center justify-center transition-transform active:scale-95 text-white">
+              <p className="text-base font-black">5</p>
+              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide opacity-80">Silver</p>
+            </Link>
+            <Link to="/profile/tier/bronze" className="badge-bronze rounded-2xl p-3 text-center flex flex-col items-center justify-center transition-transform active:scale-95 text-white">
+              <p className="text-base font-black">12</p>
+              <p className="text-[9px] font-bold mt-0.5 uppercase tracking-wide opacity-80">Bronze</p>
             </Link>
           </div>
         </div>
@@ -134,73 +138,26 @@ export function ProfilePage() {
             <div className="relative">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <p className="text-white/80 text-xs font-semibold mb-0.5">Ripple Points</p>
-                  <div className="flex items-end gap-1.5">
-                    <span className="text-4xl font-black">{USER.points.toLocaleString()}</span>
-                    <span className="text-white/70 text-sm mb-1 font-semibold">pts</span>
-                  </div>
-                  <p className="text-white/80 text-xs mt-0.5">≈ ${USER.pointsValue.toFixed(2)} redeemable value</p>
-                </div>
-                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                  <Droplets className="w-6 h-6 text-white" />
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <button className="flex-1 py-2 rounded-xl bg-white/20 text-xs font-black text-white backdrop-blur-sm">
-                  Redeem Points
-                </button>
-                <button onClick={() => navigate('/profile/transactions')} className="flex-1 py-2 rounded-xl bg-white text-xs font-black" style={{ color: BRAND }}>
-                  View History
-                </button>
-              </div>
+        {/* ── Ripple Points Banner ── */}
+        <div className="mx-4 mb-4 mt-4 rounded-3xl p-4"
+             style={{ background: 'linear-gradient(135deg, #E8431A, #C0300D)' }}>
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+              <Droplets className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1">
+              <p className="text-white/70 text-[10px] font-black uppercase tracking-wider">Ripple Points</p>
+              <p className="text-white text-2xl font-black leading-tight">{USER.points.toLocaleString()} <span className="text-base font-bold opacity-70">pts</span></p>
+              <p className="text-white/60 text-[10px] font-semibold">≈ ${(USER.points / 100).toFixed(2)} value</p>
             </div>
           </div>
-        </div>
-
-        {/* ── Rewards Section ── */}
-        <div className="px-4 space-y-4 mb-4">
-          <div className="bg-white rounded-3xl border border-slate-100 p-5 shadow-sm">
-            <h3 className="text-sm font-black text-slate-900 mb-4">How to Earn 🌊</h3>
-            <div className="space-y-3">
-              {[
-                { emoji: "🍽️", action: "Dine at a restaurant",       points: "+50 pts" },
-                { emoji: "⭐", action: "Write a review",              points: "+20 pts" },
-                { emoji: "📅", action: "Book through Ripple",         points: "+30 pts" },
-                { emoji: "👥", action: "Refer a friend",              points: "+100 pts" },
-                { emoji: "📸", action: "Share a photo",               points: "+10 pts" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">{item.emoji}</span>
-                    <p className="text-sm text-slate-700 font-medium">{item.action}</p>
-                  </div>
-                  <span className="text-sm font-black" style={{ color: BRAND }}>{item.points}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-3xl border border-slate-100 p-5 shadow-sm">
-            <h3 className="text-sm font-black text-slate-900 mb-4">Redeem Points</h3>
-            <div className="space-y-3">
-              {[
-                { emoji: "🎁", label: "$10 Amazon Gift Card",  pts: 1000 },
-                { emoji: "🍕", label: "Free Pizza (any partner restaurant)", pts: 800 },
-                { emoji: "💳", label: "$5 Bill Credit",        pts: 500 },
-                { emoji: "🚕", label: "$10 Uber Credit",       pts: 1000 },
-              ].map((r, i) => (
-                <div key={i} className="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">{r.emoji}</span>
-                    <p className="text-xs font-semibold text-slate-700">{r.label}</p>
-                  </div>
-                  <button disabled={USER.points < r.pts} className={`px-3 py-1.5 rounded-xl text-xs font-black text-white ${USER.points >= r.pts ? '' : 'opacity-30'}`} style={USER.points >= r.pts ? { backgroundColor: BRAND } : { backgroundColor: '#94a3b8' }}>
-                    {r.pts.toLocaleString()} pts
-                  </button>
-                </div>
-              ))}
-            </div>
+          <div className="flex gap-2">
+            <Link to="/profile/earn" className="flex-1 bg-white/10 hover:bg-white/20 transition-colors py-2.5 rounded-xl text-center text-xs font-black text-white">
+              How to Earn
+            </Link>
+            <Link to="/profile/redeem" className="flex-1 bg-white hover:bg-slate-50 transition-colors py-2.5 rounded-xl text-center text-xs font-black" style={{ color: BRAND }}>
+              Redeem
+            </Link>
           </div>
         </div>
 

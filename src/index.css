@@ -255,6 +255,11 @@
   .badge-silver {
     background: linear-gradient(135deg, #334155 0%, #64748B 50%, #334155 100%);
   }
+  .badge-platinum {
+    background: linear-gradient(135deg, #E2E8F0 0%, #94A3B8 100%);
+    color: #0F172A;
+  }
+  
   .badge-gold {
     background: linear-gradient(135deg, #713F12 0%, #A16207 50%, #713F12 100%);
   }
