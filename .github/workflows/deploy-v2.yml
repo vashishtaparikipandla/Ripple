@@ -1,41 +1,70 @@
-name: Deploy V2 to GitHub Pages
+name: Deploy V2 and Main to GitHub Pages
 
 on:
   push:
     branches: ['v2']
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
 concurrency:
-  group: 'pages-v2'
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}v2/
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main-branch
+
+      - name: Checkout v2
+        uses: actions/checkout@v4
+        with:
+          ref: v2
+          path: v2-branch
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Build main
+        run: |
+          cd main-branch
+          npm ci
+          npm run build
 
-      - name: Build
-        run: npm run build
+      - name: Build v2
+        run: |
+          cd v2-branch
+          npm ci
+          npm run build
 
-      - name: Deploy v2 to gh-pages /v2 subfolder
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Prepare artifact
+        run: |
+          mkdir site
+          cp -r main-branch/dist/* site/
+          mkdir site/v2
+          cp -r v2-branch/dist/* site/v2/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          destination_dir: v2
-          keep_files: true
+          path: './site'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
