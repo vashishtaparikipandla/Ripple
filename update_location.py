@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+with open('src/pages/LocationPickerPage.tsx', 'w') as f:
+    f.write("""import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Search, Navigation, MapPin, Home, Briefcase, Crosshair } from 'lucide-react'
+import { ArrowLeft, Search, Navigation, MapPin, Clock, Home, Briefcase, Crosshair } from 'lucide-react'
 
 const BRAND = '#E8431A'
 
@@ -139,3 +140,6 @@ export function LocationPickerPage() {
     </div>
   )
 }
+""")
+
+print("LocationPickerPage updated")
