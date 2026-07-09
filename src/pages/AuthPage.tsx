@@ -54,7 +54,7 @@ export function AuthPage() {
     setTimeout(() => {
       localStorage.setItem('ripple_auth', 'true')
       localStorage.setItem('ripple_user', JSON.stringify({ phone, name: 'Alex Johnson' }))
-      navigate('/', { replace: true })
+      navigate('/taste-setup', { replace: true })
     }, 900)
   }
 
@@ -63,7 +63,7 @@ export function AuthPage() {
     setTimeout(() => {
       localStorage.setItem('ripple_auth', 'true')
       localStorage.setItem('ripple_user', JSON.stringify({ name: 'Alex Johnson', social: _provider }))
-      navigate('/', { replace: true })
+      navigate('/taste-setup', { replace: true })
     }, 1200)
   }
 

@@ -1,14 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Bell, MapPin, Search, Star, Heart, Droplets,
   AlertTriangle, X, ChevronRight, TrendingUp, Award,
   PartyPopper, Sparkles, Coffee, Music, UtensilsCrossed,
-  Sunset, Moon, Salad
+  Sunset, Moon, Salad, Zap, Clock
 } from 'lucide-react'
 
 const BRAND = '#E8431A'
+
+const STORIES = [
+  { id: 1, handle: '@foodienyc', name: 'Emma Chen', avatar: 'https://i.pravatar.cc/80?u=10', restaurant: 'The Rustic Spoon', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=300&h=400&fit=crop', caption: '"The truffle risotto changed my life. Gold status well earned 🥇"', tag: 'Gold Member' },
+  { id: 2, handle: '@nycbites',  name: 'Marcus J.',  avatar: 'https://i.pravatar.cc/80?u=11', restaurant: 'Sushi Nami',       image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=300&h=400&fit=crop', caption: '"Omakase for 2 — Ripple made it 20% cheaper. Platinum goals 🍣"', tag: 'Platinum Member' },
+  { id: 3, handle: '@eatwithme', name: 'Priya S.',   avatar: 'https://i.pravatar.cc/80?u=12', restaurant: 'Bloom Bistro',     image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=300&h=400&fit=crop', caption: '"Brunch every Sunday here — Silver already in month 1!"',        tag: 'Silver Member' },
+]
+
+const FLASH_DEALS = [
+  { id: '1', name: 'The Rustic Spoon', off: '20% OFF', expires: 47, image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=300&h=180&fit=crop', badge: 'Flash Deal' },
+  { id: '4', name: 'Rooftop Garden',   off: '30% OFF', expires: 23, image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=300&h=180&fit=crop', badge: 'Tonight Only' },
+  { id: '2', name: 'Sushi Nami',       off: '15% OFF', expires: 89, image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=300&h=180&fit=crop', badge: 'Lunch Special' },
+]
+
+function FlashTimer({ minutes }: { minutes: number }) {
+  const [mins, setMins] = useState(minutes)
+  useEffect(() => {
+    const t = setInterval(() => setMins(m => Math.max(0, m - 1)), 60000)
+    return () => clearInterval(t)
+  }, [])
+  const urgent = mins <= 30
+  return (
+    <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black ${urgent ? 'bg-red-500 text-white animate-pulse' : 'bg-black/50 text-white backdrop-blur-sm'}`}>
+      <Clock className="w-2.5 h-2.5" />
+      <span>{mins}m left</span>
+    </div>
+  )
+}
 
 const MOODS = [
   { id: 'drink-dine',  Icon: Droplets,        label: 'Drink & Dine',  bg: '#FEF0EC', color: '#E8431A' },
@@ -567,7 +594,122 @@ export function HomePage() {
           </div>
         </div>
 
+
+        {/* ── Ripple Stories ── */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 className="text-lg font-black text-slate-900">Ripple Stories</h2>
+              <p className="text-[11px] text-slate-400 font-medium mt-0.5">Real diners, real savings</p>
+            </div>
+            <Link to="/restaurants" className="text-xs font-black" style={{ color: BRAND }}>See all</Link>
+          </div>
+          <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-5 px-5">
+            {STORIES.map(s => (
+              <motion.div key={s.id} whileTap={{ scale: 0.97 }} className="shrink-0 w-52 rounded-3xl overflow-hidden bg-white shadow-sm border border-slate-100">
+                <div className="h-48 relative">
+                  <img src={s.image} alt={s.name} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                  <div className="absolute top-3 left-3">
+                    <div className={`px-2 py-0.5 rounded-full text-[9px] font-black text-white ${s.tag.includes('Gold') ? 'badge-gold' : s.tag.includes('Platinum') ? 'badge-platinum' : 'badge-silver'}`}>
+                      {s.tag}
+                    </div>
+                  </div>
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <img src={s.avatar} alt={s.name} className="w-7 h-7 rounded-full border-2 border-white object-cover" />
+                      <div>
+                        <p className="text-white text-[11px] font-black leading-none">{s.name}</p>
+                        <p className="text-white/60 text-[9px] font-semibold">{s.handle}</p>
+                      </div>
+                    </div>
+                    <p className="text-white text-[10px] font-medium leading-snug">{s.caption}</p>
+                  </div>
+                </div>
+                <div className="px-3 py-2.5 flex items-center justify-between">
+                  <p className="text-[11px] font-black text-slate-700 truncate">{s.restaurant}</p>
+                  <Link to={`/restaurant/${s.id}`} className="text-[10px] font-black px-2.5 py-1 rounded-full" style={{ backgroundColor: '#FEF0EC', color: BRAND }}>
+                    Visit →
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Flash Deals ── */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <Zap className="w-5 h-5 fill-amber-400 text-amber-400" />
+            <h2 className="text-lg font-black text-slate-900">Flash Deals</h2>
+            <span className="ml-auto text-xs font-black" style={{ color: BRAND }}>Limited time</span>
+          </div>
+          <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-5 px-5">
+            {FLASH_DEALS.map(d => (
+              <Link key={d.id} to={`/restaurant/${d.id}`}>
+                <motion.div whileTap={{ scale: 0.97 }} className="shrink-0 w-52 rounded-3xl overflow-hidden bg-white shadow-sm border border-slate-100">
+                  <div className="h-32 relative">
+                    <img src={d.image} alt={d.name} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute top-2 left-2">
+                      <FlashTimer minutes={d.expires} />
+                    </div>
+                    <div className="absolute bottom-2 left-2">
+                      <span className="bg-amber-400 text-white text-[9px] font-black px-2 py-0.5 rounded-full">{d.badge}</span>
+                    </div>
+                  </div>
+                  <div className="p-3 flex items-center justify-between">
+                    <div>
+                      <p className="font-black text-[13px] text-slate-900 truncate">{d.name}</p>
+                      <p className="text-[11px] text-slate-400 font-medium">Limited time offer</p>
+                    </div>
+                    <span className="text-base font-black" style={{ color: BRAND }}>{d.off}</span>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Budget Picks ── */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 className="text-lg font-black text-slate-900">Best Under $25</h2>
+              <p className="text-[11px] text-slate-400 font-medium mt-0.5">Great meals, even better value</p>
+            </div>
+            <Link to="/restaurants" className="text-xs font-black" style={{ color: BRAND }}>See all</Link>
+          </div>
+          <div className="space-y-3">
+            {TRENDING.slice(1, 4).map((r, i) => (
+              <Link key={`budget-${r.id}`} to={`/restaurant/${r.id}`}>
+                <motion.div whileTap={{ scale: 0.98 }} className="bg-white rounded-3xl flex items-center gap-3 p-3 border border-slate-100 shadow-sm mb-3">
+                  <div className="relative shrink-0">
+                    <img src={r.image} alt={r.name} className="w-16 h-16 rounded-2xl object-cover" />
+                    <div className="absolute -bottom-1 -right-1 bg-green-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded-full shadow-sm">
+                      ${[18, 22, 14][i]} avg
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-black text-[14px] text-slate-900 truncate">{r.name}</p>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">{r.cuisine}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                      <span className="text-xs font-black text-slate-800">{r.rating}</span>
+                      <span className="text-slate-300">·</span>
+                      <MapPin className="w-3 h-3 text-slate-400" />
+                      <span className="text-[11px] text-slate-400 font-semibold">{r.dist}</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* ── Daily Food Quote ── */}
+
         <div className="py-6 px-4 text-center pb-24">
           <p className="text-xl font-black text-slate-300">"</p>
           <p className="text-sm font-semibold text-slate-500 italic mt-1 leading-relaxed">People who love to eat are always the best people.</p>

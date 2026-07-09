@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronRight, Droplets, Award, Gift, Star, Users } from 'lucide-react'
+import { ChevronRight, Droplets, Award, Gift, Star, Users, ShoppingBag } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const SLIDES = [
@@ -31,7 +31,17 @@ const SLIDES = [
     bg: 'from-[#F5F3FF] to-[#F7F5F2]',
     rings: ['#7C3AED20', '#7C3AED15', '#7C3AED08'],
   },
+  {
+    id: 3,
+    icon: ShoppingBag,
+    title: 'Pre-order.\nArrive. Enjoy.',
+    body: 'Order your food in advance and have it ready when you walk in. No waiting, no rush — just seamless dining, exactly the way you want it.',
+    accent: '#059669',
+    bg: 'from-[#ECFDF5] to-[#F7F5F2]',
+    rings: ['#05966920', '#05966915', '#05966908'],
+  },
 ]
+
 
 export function OnboardingPage() {
   const navigate   = useNavigate()

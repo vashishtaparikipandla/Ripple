@@ -16,11 +16,12 @@ import { SupportPage }        from '@/pages/SupportPage'
 import { MyReviewsPage }      from '@/pages/MyReviewsPage'
 import { RateExperiencePage } from '@/pages/RateExperiencePage'
 import { TierStatusPage }     from '@/pages/TierStatusPage'
+import { TasteSetupPage }     from '@/pages/TasteSetupPage'
 import { 
   FoodPreferencesPage, TransactionHistoryPage, SavedPlacesPage, 
   SharedDiscountsPage, NotificationSettingsPage, ThemeSettingsPage, 
   FeedbackPage, AboutPage, AddressesPage, PaymentMethodsPage,
-  HowToEarnPage, RedeemPointsPage
+  HowToEarnPage, RedeemPointsPage, PrivacySettingsPage
 } from '@/pages/ProfileSubPages'
 
 export const router = createHashRouter([
@@ -53,6 +54,9 @@ export const router = createHashRouter([
   { path: '/profile/earn',      element: <AppLayout><HowToEarnPage /></AppLayout> },
   { path: '/profile/redeem',    element: <AppLayout><RedeemPointsPage /></AppLayout> },
   { path: '/profile/tier/:tier', element: <AppLayout><TierStatusPage /></AppLayout> },
+  { path: '/profile/privacy',   element: <AppLayout><PrivacySettingsPage /></AppLayout> },
+  { path: '/taste-setup',       element: <AppLayout><TasteSetupPage /></AppLayout> },
   { path: '/support',           element: <AppLayout><SupportPage /></AppLayout> },
   { path: '/notifications',     element: <AppLayout><NotificationsPage /></AppLayout> },
 ])
+

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -128,6 +128,14 @@ const RESTAURANT = {
     { tier: 'Platinum' as Tier, perk: '20% Off + Chef\'s Table Access',     visitsNeeded: 20, unlocked: false },
   ],
 }
+
+// Ripple Picks — curated must-try items
+const RIPPLE_PICKS = [
+  { name: 'Pan Seared Salmon', tag: "Chef's Pick", img: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=200&h=200&fit=crop', price: 28, desc: 'Quinoa, asparagus, lemon butter', veg: false },
+  { name: 'Burrata',           tag: 'Most Ordered', img: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=200&h=200&fit=crop', price: 16, desc: 'Heirloom tomatoes, balsamic',   veg: true },
+  { name: 'Crème Brûlée',     tag: 'Fan Favorite', img: 'https://images.unsplash.com/photo-1470324161839-ce2bb6fa6bc3?w=200&h=200&fit=crop', price: 10, desc: 'Classic vanilla, caramel sugar', veg: true },
+  { name: 'Truffle Fries',     tag: 'Hidden Gem',   img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=200&h=200&fit=crop', price: 12, desc: 'Parmesan & truffle oil',        veg: true },
+]
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Tier = 'Bronze' | 'Silver' | 'Gold' | 'Platinum'
@@ -397,6 +405,12 @@ export function RestaurantPage() {
   const rest = { ...RESTAURANT, isOpen: isClosedDemo ? false : RESTAURANT.isOpen }
 
   const cart = useStore(state => state.cart)
+  const addToCart = useStore(state => state.addToCart)
+  const updateQuantity = useStore(state => state.updateQuantity)
+  const [lastAdded, setLastAdded] = useState<string | null>(null)
+  const [showUpsell, setShowUpsell] = useState(false)
+  const [budgetFilter, setBudgetFilter] = useState<'Any' | 'Under $15' | 'Under $25'>('Any')
+  const [showVegOnly, setShowVegOnly] = useState(false)
 
   const [activeTab, setActiveTab]       = useState<Tab>(isTabMenu ? 'menu' : 'ripple')
   const [showBooking, setShowBooking] = useState(false)
@@ -415,6 +429,14 @@ export function RestaurantPage() {
 
   const dates     = ['Today', 'Tomorrow', 'Wed 16', 'Thu 17', 'Fri 18', 'Sat 19']
   const timeSlots = ['17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00']
+
+  useEffect(() => {
+    if (lastAdded) {
+      setShowUpsell(true)
+      const t = setTimeout(() => { setShowUpsell(false); setLastAdded(null) }, 4000)
+      return () => clearTimeout(t)
+    }
+  }, [lastAdded])
 
   const handleBook = () => {
     if (!selectedTime) return
@@ -517,6 +539,106 @@ export function RestaurantPage() {
           {/* MENU */}
           {activeTab === 'menu' && (
             <motion.div key="menu" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4 space-y-5">
+
+              {/* ── Ripple Picks Shelf ── */}
+              {!menuSearch && (
+                <div className="-mx-4 px-4 pb-1">
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <h3 className="text-sm font-black text-slate-900">✨ Ripple Picks</h3>
+                      <p className="text-[11px] text-slate-400 font-medium mt-0.5">The team at The Rustic Spoon swears by these</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-1 -mx-0">
+                    {RIPPLE_PICKS.map((pick) => {
+                      const storeItem = { id: pick.name, name: pick.name, desc: pick.desc, price: pick.price.toString(), image: pick.img }
+                      const cartItem = cart.find(c => c.id === pick.name)
+                      const TAG_COLORS: Record<string, string> = {
+                        "Chef's Pick": 'bg-purple-100 text-purple-700',
+                        'Most Ordered': 'bg-amber-100 text-amber-700',
+                        'Fan Favorite': 'bg-rose-100 text-rose-700',
+                        'Hidden Gem': 'bg-emerald-100 text-emerald-700',
+                        'New on Menu': 'bg-blue-100 text-blue-700',
+                      }
+                      return (
+                        <div key={pick.name} className="shrink-0 w-36 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                          <div className="relative">
+                            <img src={pick.img} alt={pick.name} className="w-full h-24 object-cover" />
+                            <div className={`absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-black ${TAG_COLORS[pick.tag] || 'bg-slate-100 text-slate-600'}`}>
+                              {pick.tag}
+                            </div>
+                            <div className="absolute top-2 right-2">
+                              <div className={`w-3 h-3 rounded-sm border-2 ${pick.veg ? 'border-green-600' : 'border-rose-600'} flex items-center justify-center bg-white`}>
+                                <div className={`w-1.5 h-1.5 rounded-full ${pick.veg ? 'bg-green-600' : 'bg-rose-600'}`} />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="p-2.5">
+                            <p className="font-black text-[12px] text-slate-900 leading-tight">{pick.name}</p>
+                            <p className="text-[10px] text-slate-500 mt-0.5 font-medium">${pick.price}</p>
+                            <div className="mt-2">
+                              {cartItem ? (
+                                <div className="flex items-center gap-2 bg-slate-100 rounded-lg p-1">
+                                  <button onClick={() => updateQuantity(cartItem.id, cartItem.quantity - 1)} className="w-5 h-5 bg-white rounded flex items-center justify-center shadow-sm">
+                                    <Minus className="w-2.5 h-2.5" />
+                                  </button>
+                                  <span className="text-[10px] font-black w-3 text-center">{cartItem.quantity}</span>
+                                  <button onClick={() => updateQuantity(cartItem.id, cartItem.quantity + 1)} className="w-5 h-5 bg-white rounded flex items-center justify-center shadow-sm">
+                                    <Plus className="w-2.5 h-2.5" />
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => { addToCart(storeItem); setLastAdded(pick.name) }}
+                                  className="w-full bg-[#FEF0EC] text-[#E8431A] text-[10px] font-black py-1.5 rounded-lg flex items-center justify-center gap-1 active:scale-95 transition-transform"
+                                >
+                                  <Plus className="w-2.5 h-2.5" /> Add
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* ── Budget Filter ── */}
+              {!menuSearch && (
+                <div className="flex gap-2">
+                  {(['Any', 'Under $15', 'Under $25'] as const).map(b => (
+                    <button
+                      key={b}
+                      onClick={() => setBudgetFilter(b)}
+                      className={`px-3 py-1.5 rounded-full text-[11px] font-black transition-colors border ${
+                        budgetFilter === b
+                          ? 'bg-[#E8431A] text-white border-[#E8431A]'
+                          : 'bg-white text-slate-600 border-slate-200'
+                      }`}
+                    >
+                      {b}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => setShowVegOnly(v => !v)}
+                    className={`px-3 py-1.5 rounded-full text-[11px] font-black transition-colors border ${
+                      showVegOnly
+                        ? 'bg-green-600 text-white border-green-600'
+                        : 'bg-white text-slate-600 border-slate-200'
+                    }`}
+                  >
+                    🌿 Veg Only
+                  </button>
+                </div>
+              )}
+
+              {budgetFilter !== 'Any' && (
+                <div className="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-xl px-3 py-2">
+                  <span className="text-[11px] text-blue-700 font-semibold">Showing options that match your budget — dimming items outside range</span>
+                </div>
+              )}
+
               <div className="relative">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <Input
@@ -826,18 +948,38 @@ export function RestaurantPage() {
               </div>
 
               {bookingConfirmed ? (
-                <div className="flex-1 flex flex-col items-center justify-center py-10 gap-4">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <div className="flex-1 flex flex-col items-center justify-center py-6 gap-3">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-1">
                     <CheckCircle className="w-8 h-8 text-green-600" />
                   </div>
                   <div className="text-center w-full px-5">
                     <p className="font-black text-lg text-slate-900">Booking Confirmed!</p>
-                    <p className="text-sm text-slate-500 mt-1 mb-8">See you {selectedDate} at {selectedTime}</p>
-                    
-                    <div className="flex gap-3">
-                      <button onClick={() => { setShowBooking(false); setBookingConfirmed(false); }} className="flex-1 py-3.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 bg-white">Close</button>
-                      <button onClick={() => { setShowBooking(false); setBookingConfirmed(false); setActiveTab('menu'); }} className="flex-1 py-3.5 rounded-xl text-sm font-bold text-white shadow-lg" style={{ backgroundColor: BRAND }}>Pre-order Food</button>
+                    <p className="text-sm text-slate-500 mt-1 mb-5">See you {selectedDate} at {selectedTime}</p>
+
+                    {/* Pre-order choice cards */}
+                    <div className="space-y-3 mb-4 text-left">
+                      <button
+                        onClick={() => { setShowBooking(false); setBookingConfirmed(false); setActiveTab('menu') }}
+                        className="w-full bg-gradient-to-br from-[#E8431A] to-[#C0300D] text-white rounded-2xl p-4 text-left shadow-lg"
+                      >
+                        <p className="font-black text-sm">🏃 Pay Now & Skip the Wait</p>
+                        <p className="text-white/80 text-[11px] mt-1 leading-snug">Pre-pay for your order. Your food will be ready when you arrive — no wait, guaranteed.</p>
+                        <p className="text-white/60 text-[10px] mt-2">~20 min prep time · Cancellable up to 30 min before</p>
+                        <div className="mt-3 bg-white/20 rounded-xl px-3 py-2 text-[11px] font-black text-white inline-block">Pre-order &amp; Pay Now →</div>
+                      </button>
+
+                      <button
+                        onClick={() => { setShowBooking(false); setBookingConfirmed(false); setActiveTab('menu') }}
+                        className="w-full bg-white border border-slate-200 rounded-2xl p-4 text-left"
+                      >
+                        <p className="font-black text-sm text-slate-900">💳 Decide at the Restaurant</p>
+                        <p className="text-slate-500 text-[11px] mt-1 leading-snug">Browse the menu in advance, but pay when you're there. Your selections are saved.</p>
+                        <p className="text-slate-400 text-[10px] mt-2">No charge until you're there</p>
+                        <div className="mt-3 bg-slate-100 rounded-xl px-3 py-2 text-[11px] font-black text-slate-700 inline-block">Browse Menu &amp; Save →</div>
+                      </button>
                     </div>
+
+                    <button onClick={() => { setShowBooking(false); setBookingConfirmed(false) }} className="w-full py-3 rounded-xl border border-slate-200 text-sm font-bold text-slate-400">Close</button>
                   </div>
                 </div>
               ) : (
@@ -1016,6 +1158,47 @@ export function RestaurantPage() {
               </div>
             </motion.div>
           </>
+        )}
+      </AnimatePresence>
+
+      {/* ── Upsell: Pairs Well With ── */}
+      <AnimatePresence>
+        {showUpsell && lastAdded && (
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 30, stiffness: 250 }}
+            className="fixed bottom-20 left-4 right-4 bg-white rounded-3xl shadow-2xl z-50 p-4 border border-slate-100"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-black text-slate-900">🍷 Pairs perfectly with</p>
+              <button onClick={() => setShowUpsell(false)} className="w-7 h-7 bg-slate-100 rounded-full flex items-center justify-center">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <div className="flex gap-3 overflow-x-auto hide-scrollbar">
+              {[
+                { name: 'Sparkling Water', price: 4, img: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=120&h=120&fit=crop' },
+                { name: 'House Wine',      price: 9, img: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=120&h=120&fit=crop' },
+                { name: 'Garlic Bread',   price: 6, img: 'https://images.unsplash.com/photo-1619531040914-3e50a5af3e6b?w=120&h=120&fit=crop' },
+              ].map(u => (
+                <div key={u.name} className="shrink-0 flex items-center gap-2 bg-slate-50 rounded-2xl p-2 border border-slate-100">
+                  <img src={u.img} alt={u.name} className="w-12 h-12 rounded-xl object-cover" />
+                  <div>
+                    <p className="text-[11px] font-black text-slate-900">{u.name}</p>
+                    <p className="text-[10px] text-slate-500">${u.price}</p>
+                    <button
+                      onClick={() => { addToCart({ id: u.name, name: u.name, desc: '', price: u.price.toString(), image: u.img }); setShowUpsell(false) }}
+                      className="mt-1 text-[10px] font-black text-[#E8431A] bg-[#FEF0EC] px-2 py-0.5 rounded-full flex items-center gap-0.5"
+                    >
+                      <Plus className="w-2.5 h-2.5" /> Add
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
