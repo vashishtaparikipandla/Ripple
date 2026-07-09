@@ -214,13 +214,13 @@ export function WelcomeTutorialPage() {
               <div key={i} className={`h-2 rounded-full transition-all duration-500 ${i === step ? 'w-8 bg-[#E8431A]' : 'w-2 bg-slate-200'}`} />
             ))}
           </div>
-          <button onClick={() => navigate('/', { replace: true })} className="text-sm font-bold text-slate-400">
+          <button onClick={() => { localStorage.setItem('ripple_onboarded', 'true'); navigate('/auth', { replace: true }) }} className="text-sm font-bold text-slate-400">
             Skip
           </button>
         </div>
         
         <button
-          onClick={() => step < slides.length - 1 ? setStep(s => s + 1) : navigate('/', { replace: true })}
+          onClick={() => step < slides.length - 1 ? setStep(s => s + 1) : (() => { localStorage.setItem('ripple_onboarded', 'true'); navigate('/auth', { replace: true }) })()}
           className="w-full py-4 rounded-2xl font-black text-white text-lg flex items-center justify-center gap-2 shadow-xl shadow-orange-500/20 active:scale-95 transition-transform"
           style={{ backgroundColor: BRAND }}
         >

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Bell, MapPin, Search, Star, Heart, Droplets,
-  AlertTriangle, X, ChevronRight, TrendingUp, Award,
+  AlertTriangle, X, ChevronRight, ChevronDown, TrendingUp, Award,
   PartyPopper, Sparkles, Coffee, Music, UtensilsCrossed,
   Sunset, Moon, Salad, Zap, Clock
 } from 'lucide-react'
@@ -138,10 +138,11 @@ export function HomePage() {
           </div>
           <div>
             <h1 className="text-lg font-black text-slate-900 leading-none">Ripple</h1>
-            <div className="flex items-center gap-1 mt-0.5">
+            <Link to="/location" className="flex items-center gap-1 mt-0.5 active:opacity-50">
               <MapPin className="w-3 h-3 text-slate-400" />
               <span className="text-[10px] text-slate-500 font-semibold">Manhattan, NY</span>
-            </div>
+              <ChevronDown className="w-3 h-3 text-slate-400" />
+            </Link>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -231,12 +232,12 @@ export function HomePage() {
                         <AlertTriangle className="w-5 h-5 text-white" />
                       </div>
                       <div className="flex-1 pr-6">
-                        <p className="text-sm font-black text-slate-900 leading-tight">Your Gold is fading at The Rustic Spoon</p>
+                        <p className="text-sm font-black text-slate-900 leading-tight">Your Silver is fading at The Rustic Spoon</p>
                         <p className="text-[11px] text-slate-500 font-medium mt-1 leading-tight">
-                          Visit within 3 days or share with a friend to keep your Gold status.
+                          Visit within 3 days or share with a friend to keep your Silver status.
                         </p>
                         <div className="flex items-center gap-1 mt-2" style={{ color: BRAND }}>
-                          <span className="text-[11px] font-black">Tap to hold your Gold</span>
+                          <span className="text-[11px] font-black">Tap to hold your Silver</span>
                           <ChevronRight className="w-3 h-3" />
                         </div>
                       </div>

@@ -110,12 +110,12 @@ const RESTAURANT = {
     },
   ],
   photos: [
-    'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&q=80&w=400',
-    'https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=400',
-    'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&q=80&w=400',
-    'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=400',
-    'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=400',
-    'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&q=80&w=400',
+    { url: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&q=80&w=400', category: 'Food' },
+    { url: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=400', category: 'Interior' },
+    { url: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&q=80&w=400', category: 'Drinks' },
+    { url: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=400', category: 'Interior' },
+    { url: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=400', category: 'Food' },
+    { url: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&q=80&w=400', category: 'Drinks' },
   ],
   userReviews: [
     { id: 1, author: 'Sarah M.', avatar: 'https://i.pravatar.cc/80?u=1',  rating: 5, text: 'Amazing experience! The steak was cooked to perfection.', date: '2 days ago', images: ['https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop'] },
@@ -188,9 +188,9 @@ function RippleViz({ userTier, visits, visitsForGold }: { userTier: Tier; visits
   
   return (
     <div className="py-2">
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-[2.5rem] p-6 text-white shadow-2xl relative overflow-hidden">
+      <div className="bg-gradient-to-br from-white via-orange-50/50 to-orange-100/50 rounded-[2.5rem] p-6 text-slate-900 shadow-[0_8px_30px_rgba(232,67,26,0.06)] border border-orange-100 relative overflow-hidden">
         {/* Animated Background Waves */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
           <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute top-0 left-0 w-[200%] h-full animate-[ripple_10s_linear_infinite]">
             <path d="M0,50 Q25,30 50,50 T100,50 T150,50 T200,50 L200,100 L0,100 Z" fill="currentColor" className="text-[#E8431A]" />
           </svg>
@@ -202,16 +202,16 @@ function RippleViz({ userTier, visits, visitsForGold }: { userTier: Tier; visits
         {/* Header */}
         <div className="relative z-10 flex justify-between items-start mb-8">
           <div>
-            <p className="text-sm font-bold text-white/60 tracking-wider uppercase mb-1">Your Ripple</p>
+            <p className="text-sm font-bold text-slate-500 tracking-wider uppercase mb-1">Your Ripple</p>
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-black">{visits}</span>
-              <span className="text-sm font-medium text-white/60">visits</span>
+              <span className="text-4xl font-black text-slate-900">{visits}</span>
+              <span className="text-sm font-medium text-slate-500">visits</span>
             </div>
-            <p className="text-xs font-bold mt-1 text-amber-400">{visitsForGold - visits} more to unlock Gold</p>
+            <p className="text-xs font-bold mt-1 text-[#E8431A]">{visitsForGold - visits} more to unlock Gold</p>
           </div>
-          <div className="text-right bg-white/10 backdrop-blur-md px-3 py-2 rounded-2xl border border-white/10">
-            <p className="text-[10px] font-bold text-white/60 uppercase tracking-wider mb-0.5">Discount</p>
-            <p className="text-xl font-black text-white">{RESTAURANT.currentDiscount}%</p>
+          <div className="text-right bg-white/70 backdrop-blur-md px-3 py-2 rounded-2xl border border-white/60 shadow-sm">
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Discount</p>
+            <p className="text-xl font-black text-[#E8431A]">{RESTAURANT.currentDiscount}%</p>
           </div>
         </div>
         
@@ -227,30 +227,30 @@ function RippleViz({ userTier, visits, visitsForGold }: { userTier: Tier; visits
                 <div 
                   key={tier} 
                   className={`snap-center shrink-0 w-[85%] rounded-3xl p-5 border backdrop-blur-xl transition-all ${
-                    isActive ? 'bg-white/10 border-white/30 shadow-[0_0_30px_rgba(255,255,255,0.1)]' 
-                    : isUnlocked ? 'bg-white/5 border-white/10 opacity-70' 
-                    : 'bg-black/20 border-white/5 opacity-50'
+                    isActive ? 'bg-white/90 border-[#E8431A]/30 shadow-[0_8px_20px_rgba(232,67,26,0.08)]' 
+                    : isUnlocked ? 'bg-white/60 border-slate-200 opacity-90' 
+                    : 'bg-slate-50/50 border-slate-100 opacity-60'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-inner ${isUnlocked ? cfg.cls : 'bg-white/10 text-white/40'}`}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-inner ${isUnlocked ? cfg.cls : 'bg-slate-200 text-slate-400'}`}>
                         {isUnlocked ? <CheckCircle className="w-5 h-5 text-white" /> : <span className="font-black text-sm">{i * 3 + 1}</span>}
                       </div>
                       <div>
-                        <h3 className="font-black text-lg" style={{ color: isUnlocked ? cfg.color : '#fff' }}>{tier}</h3>
-                        <p className="text-xs font-medium text-white/60">{i * 3 + 1} visits required</p>
+                        <h3 className="font-black text-lg" style={{ color: isUnlocked ? cfg.color : '#64748b' }}>{tier}</h3>
+                        <p className="text-xs font-medium text-slate-500">{i * 3 + 1} visits required</p>
                       </div>
                     </div>
                     {isActive && (
-                      <span className="text-[10px] font-black uppercase tracking-wider bg-[#E8431A] text-white px-2.5 py-1 rounded-full">
+                      <span className="text-[10px] font-black uppercase tracking-wider bg-[#E8431A] text-white px-2.5 py-1 rounded-full shadow-sm">
                         Active
                       </span>
                     )}
                   </div>
                   
-                  <div className="bg-black/20 rounded-2xl p-3 border border-white/5">
-                    <p className="text-sm font-medium text-white/80 leading-relaxed">
+                  <div className="bg-slate-50/80 rounded-2xl p-3 border border-slate-100">
+                    <p className="text-sm font-medium text-slate-600 leading-relaxed">
                       {isUnlocked 
                         ? `Enjoy your permanent ${i === 0 ? '5%' : i === 1 ? '10%' : '20%'} discount on all orders.`
                         : `Visit ${i * 3 + 1 - visits} more times to unlock a permanent ${i === 0 ? '5%' : i === 1 ? '10%' : '20%'} discount.`
@@ -273,6 +273,7 @@ function RippleViz({ userTier, visits, visitsForGold }: { userTier: Tier; visits
     </div>
   )
 }
+
 
 
 // ── Tier benefit row ─────────────────────────────────────────────────────────
@@ -668,11 +669,11 @@ export function RestaurantPage() {
               <div className="rounded-3xl p-4 border border-[#E8431A]/20" style={{ background: 'linear-gradient(135deg, #FEF0EC, #FFF)' }}>
                 <div className="flex items-center gap-2 mb-1">
                   <AlertTriangle className="w-4 h-4" style={{ color: BRAND }} />
-                  <p className="text-sm font-black text-slate-900">Your Gold is fading!</p>
+                  <p className="text-sm font-black text-slate-900">Your {rest.userTier} is fading!</p>
                 </div>
-                <p className="text-[11px] text-slate-500 font-medium mb-3">Visit within 3 days to keep your Gold Ripple status at this restaurant.</p>
+                <p className="text-[11px] text-slate-500 font-medium mb-3">Visit within 3 days to keep your {rest.userTier} Ripple status at this restaurant.</p>
                 <button onClick={() => setShowHoldGold(p => !p)} className="text-[11px] font-black flex items-center gap-1" style={{ color: BRAND }}>
-                  Hold onto Gold <ChevronRight className="w-3 h-3" />
+                  Hold onto {rest.userTier} <ChevronRight className="w-3 h-3" />
                 </button>
                 <AnimatePresence>
                   {showHoldGold && (
@@ -886,10 +887,12 @@ export function RestaurantPage() {
                 ))}
               </div>
               <div className="grid grid-cols-2 gap-2">
-                {rest.photos.map((photo, i) => (
+                {rest.photos
+                  .filter((p: any) => photoFilter === 'All' || p.category === photoFilter)
+                  .map((photo: any, i: number) => (
                   <motion.div key={i} whileTap={{ scale: 0.96 }}
                     className={`rounded-2xl overflow-hidden bg-slate-100 ${i === 0 ? 'col-span-2 h-48' : 'h-36'}`}>
-                    <img src={photo} alt={`Photo ${i+1}`} className="w-full h-full object-cover" />
+                    <img src={photo.url} alt={`Photo ${i+1}`} className="w-full h-full object-cover" />
                   </motion.div>
                 ))}
               </div>
@@ -903,7 +906,7 @@ export function RestaurantPage() {
                 <p className="text-sm text-slate-600 leading-relaxed font-medium">{rest.description}</p>
               </div>
               <div className="bg-white rounded-3xl p-5 border border-slate-100">
-                <h3 className="text-sm font-black text-slate-900 mb-4">Meet the Team</h3>
+                <h3 className="text-sm font-black text-slate-900 mb-4">Meet the team behind the food</h3>
                 <div className="grid grid-cols-2 gap-y-5 gap-x-3">
                   {[
                     { name: 'Michael', role: 'Head Chef', img: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=150&h=150&fit=crop' },
@@ -964,25 +967,7 @@ export function RestaurantPage() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white rounded-3xl p-5 border border-slate-100">
-                <h3 className="text-sm font-black text-slate-900 mb-4">Meet the Team</h3>
-                <div className="grid grid-cols-2 gap-y-5 gap-x-3">
-                  {[
-                    { name: 'Michael', role: 'Head Chef', img: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=150&h=150&fit=crop' },
-                    { name: 'Sarah', role: 'Manager', img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop' },
-                    { name: 'David', role: 'Sommelier', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop' },
-                    { name: 'Elena', role: 'Host', img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop' },
-                  ].map(t => (
-                    <div key={t.name} className="flex items-center gap-3">
-                      <img src={t.img} alt={t.name} className="w-12 h-12 rounded-full object-cover shadow-sm" />
-                      <div>
-                        <p className="text-sm font-black text-slate-900">{t.name}</p>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase">{t.role}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+
             </motion.div>
           )}
 

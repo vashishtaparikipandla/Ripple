@@ -12,7 +12,7 @@ export function SplashPage() {
     const timer = setTimeout(() => {
       if (authed)    navigate('/',        { replace: true })
       else if (onboarded) navigate('/auth',  { replace: true })
-      else           navigate('/onboard', { replace: true })
+      else           navigate('/welcome', { replace: true })
     }, 2200)
 
     return () => clearTimeout(timer)
