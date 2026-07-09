@@ -17,6 +17,9 @@ import { MyReviewsPage }      from '@/pages/MyReviewsPage'
 import { RateExperiencePage } from '@/pages/RateExperiencePage'
 import { TierStatusPage }     from '@/pages/TierStatusPage'
 import { TasteSetupPage }     from '@/pages/TasteSetupPage'
+import { WelcomeTutorialPage } from '@/pages/WelcomeTutorialPage'
+import { LocationPickerPage } from '@/pages/LocationPickerPage'
+import { RippleStoryPage } from '@/pages/RippleStoryPage'
 import { 
   FoodPreferencesPage, TransactionHistoryPage, SavedPlacesPage, 
   SharedDiscountsPage, NotificationSettingsPage, ThemeSettingsPage, 
@@ -56,6 +59,9 @@ export const router = createHashRouter([
   { path: '/profile/tier/:tier', element: <AppLayout><TierStatusPage /></AppLayout> },
   { path: '/profile/privacy',   element: <AppLayout><PrivacySettingsPage /></AppLayout> },
   { path: '/taste-setup',       element: <AppLayout><TasteSetupPage /></AppLayout> },
+  { path: '/welcome',           element: <AppLayout><WelcomeTutorialPage /></AppLayout> },
+  { path: '/location',          element: <AppLayout><LocationPickerPage /></AppLayout> },
+  { path: '/story/:id',         element: <AppLayout><RippleStoryPage /></AppLayout> },
   { path: '/support',           element: <AppLayout><SupportPage /></AppLayout> },
   { path: '/notifications',     element: <AppLayout><NotificationsPage /></AppLayout> },
 ])

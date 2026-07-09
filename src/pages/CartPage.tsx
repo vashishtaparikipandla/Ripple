@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { LegalDrawer } from '@/components/LegalDrawer'
 import { ArrowLeft, Minus, Plus, Trash2, Droplets, ChevronRight, CheckCircle2 } from 'lucide-react'
 import { useStore } from '../lib/store'
 
@@ -15,6 +16,7 @@ export function CartPage() {
   const [showCheckout, setShowCheckout] = useState(false)
   const [usePoints, setUsePoints] = useState(false)
   const [acceptedTerms, setAcceptedTerms] = useState(false)
+  const [showTerms, setShowTerms] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
 
   const subtotal = cart.reduce((acc, item) => acc + parseFloat(item.price) * item.quantity, 0)
@@ -179,7 +181,7 @@ export function CartPage() {
                            checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} />
                   </div>
                   <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
-                    By placing this order, you agree to the <a href="#" className="font-bold text-[#E8431A] underline">Terms & Conditions</a>. 
+                    By placing this order, you agree to the <button type="button" onClick={() => setShowTerms(true)} className="font-bold text-[#E8431A] underline">Terms & Conditions</button>. 
                     Food must be picked up or consumed within 30 minutes of the selected time. Cancellations are non-refundable.
                   </p>
                 </label>
@@ -214,7 +216,7 @@ export function CartPage() {
           </motion.div>
         )}
       </AnimatePresence>
-
+      <LegalDrawer isOpen={showTerms} onClose={() => setShowTerms(false)} type="terms" />
     </div>
   )
 }

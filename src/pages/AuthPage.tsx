@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { LegalDrawer } from '@/components/LegalDrawer'
 import { Phone, ChevronRight, ChevronLeft, Droplets, X } from 'lucide-react'
 
 type Step = 'method' | 'phone' | 'otp'
@@ -14,6 +15,7 @@ export function AuthPage() {
   const [otp, setOtp]           = useState(['', '', '', '', '', ''])
   const [error, setError]       = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [legalType, setLegalType] = useState<'terms' | 'privacy' | null>(null)
   const otpRefs = useRef<(HTMLInputElement | null)[]>([])
 
   // Auto-focus first OTP box
@@ -153,8 +155,8 @@ export function AuthPage() {
 
               <p className="text-[11px] text-slate-400 text-center mt-6 leading-relaxed">
                 By continuing, you agree to our{' '}
-                <span className="font-bold" style={{ color: BRAND }}>Terms</span> &{' '}
-                <span className="font-bold" style={{ color: BRAND }}>Privacy Policy</span>
+                <button type="button" onClick={() => setLegalType('terms')} className="font-bold inline" style={{ color: BRAND }}>Terms</button> &{' '}
+                <button type="button" onClick={() => setLegalType('privacy')} className="font-bold inline" style={{ color: BRAND }}>Privacy Policy</button>
               </p>
             </motion.div>
           )}
@@ -259,6 +261,7 @@ export function AuthPage() {
           )}
 
         </AnimatePresence>
+        <LegalDrawer isOpen={legalType !== null} onClose={() => setLegalType(null)} type={legalType || 'terms'} />
       </div>
     </div>
   )
