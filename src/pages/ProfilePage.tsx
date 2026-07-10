@@ -49,6 +49,7 @@ const SECTION_LINKS: { section: string; items: FlowItem[] }[] = [
   {
     section: "Support",
     items: [
+      { id: 'tutorial', icon: HelpCircle, label: "How Ripple Works", sub: "Replay the app tutorial", color: "text-amber-600", bg: "bg-amber-50", path: "/welcome" },
       { id: 'help',     icon: HelpCircle, label: "Help & Support", sub: "FAQs, Chat, Tickets", color: "text-teal-600",  bg: "bg-teal-50", path: "/support" },
       { id: 'feedback', icon: MessageSquare, label: "Share Feedback", sub: "Help us improve",    color: "text-sky-600",   bg: "bg-sky-50", path: "/profile/feedback" },
       { id: 'about',    icon: Info,       label: "About Ripple",   sub: "Version 2.1.0",       color: "text-slate-600", bg: "bg-slate-100", path: "/profile/about" },
