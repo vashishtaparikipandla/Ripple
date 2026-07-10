@@ -67,6 +67,18 @@ const CURATED = [
   { id: 2, title: 'Best Asian Fusion', subtitle: 'Spice up your week', image: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=400&h=200&fit=crop' },
 ]
 
+const COMMUNITY_POSTS = [
+  { id: 1, handle: '@biteswithbella', name: 'Bella R.', avatar: 'https://i.pravatar.cc/80?u=20', restaurant: 'Bloom Bistro', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=300&h=500&fit=crop', caption: '"Literally the best brunch spot in the city right now"', tier: 'Gold', likes: 3241, saves: 187 },
+  { id: 2, handle: '@manhattaneats', name: 'Tyler V.', avatar: 'https://i.pravatar.cc/80?u=21', restaurant: 'Rooftop Garden', image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=300&h=500&fit=crop', caption: '"Sunsets + cocktails. Ripple got me 30% off this view 🌅"', tier: 'Platinum', likes: 8912, saves: 441 },
+  { id: 3, handle: '@spicyspoonful', name: 'Nadia K.', avatar: 'https://i.pravatar.cc/80?u=22', restaurant: 'Sushi Nami', image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=300&h=500&fit=crop', caption: '"Omakase season has arrived. This is life 🍣"', tier: 'Silver', likes: 2105, saves: 98 },
+]
+
+const MEMBER_LOVES = [
+  { id: 1, member: 'Jamie L.', avatar: 'https://i.pravatar.cc/80?u=30', restaurant: 'The Rustic Spoon', image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=300&fit=crop', quote: '"My go-to for client dinners. The Silver Ripple discount literally pays for itself."', tier: 'Silver', visits: 8 },
+  { id: 2, member: 'Priya M.', avatar: 'https://i.pravatar.cc/80?u=31', restaurant: 'Cozy Corner Cafe', image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=300&fit=crop', quote: '"Started going every Sunday. Gold in 2 months. The croissants are worth it."', tier: 'Gold', visits: 14 },
+  { id: 3, member: 'Carlos D.', avatar: 'https://i.pravatar.cc/80?u=32', restaurant: 'Rooftop Garden', image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&h=300&fit=crop', quote: '"Best date night spot. Platinum status means chef\'s table access every time."', tier: 'Platinum', visits: 22 },
+]
+
 function Confetti() {
   const pieces = Array.from({ length: 18 }, (_, i) => ({
     left: `${Math.random() * 90 + 5}%`,
@@ -416,6 +428,50 @@ export function HomePage() {
           </div>
         </div>
 
+        {/* ── Spotted by Your Community ── */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 className="text-lg font-black text-slate-900">Spotted by your community</h2>
+              <p className="text-[11px] text-slate-400 font-medium mt-0.5">Real visits, real vibes — from Ripple members near you</p>
+            </div>
+            <Link to="/restaurants" className="text-xs font-black shrink-0" style={{ color: BRAND }}>See all</Link>
+          </div>
+          <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-5 px-5">
+            {COMMUNITY_POSTS.map(post => (
+              <motion.div key={post.id} whileTap={{ scale: 0.97 }} className="shrink-0 w-44 rounded-3xl overflow-hidden bg-white shadow-sm border border-slate-100">
+                <div className="relative" style={{ height: 260 }}>
+                  <img src={post.image} alt={post.restaurant} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                  {/* Tier badge */}
+                  <div className={`absolute top-3 left-3 px-2 py-0.5 rounded-full text-[9px] font-black text-white badge-${post.tier.toLowerCase()}`}>
+                    {post.tier} Rippler
+                  </div>
+                  {/* Author info */}
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <img src={post.avatar} alt={post.name} className="w-6 h-6 rounded-full border border-white/60 object-cover" />
+                      <div>
+                        <p className="text-white text-[10px] font-black leading-none">{post.name}</p>
+                        <p className="text-white/60 text-[9px] font-semibold">{post.handle}</p>
+                      </div>
+                    </div>
+                    <p className="text-white text-[10px] font-medium leading-snug">{post.caption}</p>
+                    <div className="flex items-center gap-3 mt-2">
+                      <span className="text-white/60 text-[9px] font-bold">❤️ {post.likes.toLocaleString()}</span>
+                      <span className="text-white/60 text-[9px] font-bold">🔖 {post.saves}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="px-3 py-2.5 flex items-center justify-between">
+                  <p className="text-[11px] font-black text-slate-700 truncate">{post.restaurant}</p>
+                  <Link to="/restaurant/1" className="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0" style={{ backgroundColor: '#FEF0EC', color: BRAND }}>Visit →</Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
         {/* ── Quick Explore by Theme ── */}
         <div>
           <h2 className="text-lg font-black text-slate-900 mb-3">Explore by theme</h2>
@@ -432,6 +488,42 @@ export function HomePage() {
                   style={{ backgroundColor: t.bg }}>
                   <t.icon className="w-6 h-6" style={{ color: t.color }} />
                   <p className="text-[12px] font-black text-slate-800 leading-tight">{t.label}</p>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── What Members Are Loving ── */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 className="text-lg font-black text-slate-900">What members are loving</h2>
+              <p className="text-[11px] text-slate-400 font-medium mt-0.5">Recommended by regulars in your neighborhood</p>
+            </div>
+          </div>
+          <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2 -mx-5 px-5">
+            {MEMBER_LOVES.map(m => (
+              <Link key={m.id} to="/restaurant/1">
+                <motion.div whileTap={{ scale: 0.97 }} className="shrink-0 w-72 rounded-3xl overflow-hidden bg-white shadow-sm border border-slate-100">
+                  <div className="h-36 relative">
+                    <img src={m.image} alt={m.restaurant} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <div className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-[9px] font-black text-white badge-${m.tier.toLowerCase()}`}>
+                      {m.tier} · {m.visits} visits
+                    </div>
+                    <p className="absolute bottom-3 left-4 right-4 text-white text-[11px] font-black leading-snug">{m.restaurant}</p>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-[12px] text-slate-600 font-medium leading-relaxed italic">{m.quote}</p>
+                    <div className="flex items-center gap-2 mt-3">
+                      <img src={m.avatar} alt={m.member} className="w-7 h-7 rounded-full object-cover border-2" style={{ borderColor: '#FEF0EC' }} />
+                      <div>
+                        <p className="text-[11px] font-black text-slate-900">{m.member}</p>
+                        <p className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Verified Ripple Member</p>
+                      </div>
+                    </div>
+                  </div>
                 </motion.div>
               </Link>
             ))}
