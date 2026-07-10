@@ -183,7 +183,7 @@ function Confetti() {
 }
 
 // ── Premium Ripple Visualization ─────────────────────────────────────────
-function RippleViz({ userTier, visits, visitsForGold }: { userTier: Tier; visits: number; visitsForGold: number }) {
+function RippleViz({ userTier, visits, visitsForGold, restaurantName }: { userTier: Tier; visits: number; visitsForGold: number; restaurantName: string }) {
   const currentIdx = TIERS.indexOf(userTier)
   
   return (
@@ -200,16 +200,17 @@ function RippleViz({ userTier, visits, visitsForGold }: { userTier: Tier; visits
         </div>
 
         {/* Header */}
-        <div className="relative z-10 flex justify-between items-start mb-8">
+        <div className="relative z-10 flex justify-between items-start mb-6">
           <div>
-            <p className="text-sm font-bold text-slate-500 tracking-wider uppercase mb-1">Your Ripple</p>
+            <h3 className="text-xl font-black text-slate-900">Your Ripple</h3>
+            <p className="text-xs text-slate-500 font-medium mt-0.5 mb-4">Loyalty at {restaurantName}</p>
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-black text-slate-900">{visits}</span>
-              <span className="text-sm font-medium text-slate-500">visits</span>
+              <span className="text-5xl font-black text-slate-900 leading-none">{visits}</span>
+              <span className="text-sm font-bold text-slate-500">visits</span>
             </div>
-            <p className="text-xs font-bold mt-1 text-[#E8431A]">{visitsForGold - visits} more to unlock Gold</p>
+            <p className="text-xs font-bold mt-1.5 text-[#E8431A]">{visitsForGold - visits} more to unlock Gold</p>
           </div>
-          <div className="text-right bg-white/70 backdrop-blur-md px-3 py-2 rounded-2xl border border-white/60 shadow-sm">
+          <div className="text-right bg-white/80 backdrop-blur-md px-3 py-2 rounded-2xl border border-white/60 shadow-sm">
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Discount</p>
             <p className="text-xl font-black text-[#E8431A]">{RESTAURANT.currentDiscount}%</p>
           </div>
@@ -701,18 +702,7 @@ export function RestaurantPage() {
               </div>
 
               {/* Concentric visualization */}
-              <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-                <div className="px-5 pt-5 pb-1 flex justify-between items-start">
-                  <div>
-                    <h3 className="text-base font-black text-slate-900">Your Ripple</h3>
-                    <p className="text-xs text-slate-500 font-medium mt-0.5">Loyalty at The Rustic Spoon</p>
-                  </div>
-                  <div className={`inline-flex px-2.5 py-1 rounded-full text-[10px] font-black text-white ${TIER_CONFIG[rest.userTier].cls}`}>
-                    {rest.userTier}
-                  </div>
-                </div>
-                <RippleViz userTier={rest.userTier} visits={rest.userVisits} visitsForGold={rest.goldVisitsNeeded} />
-              </div>
+              <RippleViz userTier={rest.userTier} visits={rest.userVisits} visitsForGold={rest.goldVisitsNeeded} restaurantName={rest.name} />
 
               {/* Tier perks list */}
               <div className="bg-white rounded-3xl border border-slate-100 p-4 space-y-2.5">
