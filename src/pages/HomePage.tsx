@@ -5,7 +5,8 @@ import {
   Bell, MapPin, Search, Star, Heart, Droplets,
   AlertTriangle, X, ChevronRight, ChevronDown, TrendingUp, Award,
   PartyPopper, Sparkles, Coffee, Music, UtensilsCrossed,
-  Sunset, Moon, Salad, Zap, Clock
+  Sunset, Moon, Salad, Zap, Clock,
+  MessageCircle, Bookmark, ChevronUp, Store
 } from 'lucide-react'
 
 const BRAND = '#E8431A'
@@ -110,11 +111,150 @@ function Confetti() {
   )
 }
 
+
+function CommunityFeedOverlay({ initialIndex, onClose }: { initialIndex: number, onClose: () => void }) {
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const [minimized, setMinimized] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(initialIndex)
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = initialIndex * window.innerHeight
+    }
+  }, [initialIndex])
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const idx = Math.round(e.currentTarget.scrollTop / window.innerHeight)
+    setActiveIndex(idx)
+  }
+
+  const activePost = COMMUNITY_POSTS[activeIndex] || COMMUNITY_POSTS[0]
+
+  return (
+    <motion.div
+      initial={{ y: '100%', opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: '100%', opacity: 0 }}
+      transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+      className="fixed inset-0 z-[100] bg-black text-white"
+    >
+      {/* Top Bar */}
+      <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between p-5 bg-gradient-to-b from-black/50 to-transparent pointer-events-none">
+        <button onClick={onClose} className="w-10 h-10 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center pointer-events-auto">
+          <ChevronDown className="w-6 h-6 text-white" />
+        </button>
+        <span className="font-bold text-white text-sm shadow-black">Community</span>
+        <div className="w-10" />
+      </div>
+
+      {/* Vertical Feed Container */}
+      <div 
+        ref={containerRef}
+        onScroll={handleScroll}
+        className="h-[100dvh] w-full overflow-y-auto snap-y snap-mandatory hide-scrollbar"
+      >
+        {COMMUNITY_POSTS.map(post => (
+          <div key={post.id} className="h-[100dvh] w-full snap-start snap-always relative">
+            <img src={post.image} alt={post.restaurant} className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
+            
+            {/* Right Action Bar */}
+            <div className="absolute right-4 bottom-36 flex flex-col items-center gap-6 z-20">
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-full flex items-center justify-center">
+                  <Heart className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-xs font-bold drop-shadow-md">{post.likes > 1000 ? (post.likes/1000).toFixed(1)+'k' : post.likes}</span>
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-full flex items-center justify-center">
+                  <Bookmark className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-xs font-bold drop-shadow-md">{post.saves}</span>
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-full flex items-center justify-center">
+                  <MessageCircle className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-xs font-bold drop-shadow-md">12</span>
+              </div>
+            </div>
+
+            {/* Bottom Left Info */}
+            <div className="absolute left-4 bottom-36 right-20 z-20">
+              <div className="flex items-center gap-2 mb-3">
+                <img src={post.avatar} alt={post.name} className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-sm" />
+                <div>
+                  <p className="font-black text-sm drop-shadow-md">{post.handle}</p>
+                  <p className="text-[11px] bg-white/20 px-2 py-0.5 rounded-full inline-block mt-0.5 backdrop-blur font-bold shadow-sm">{post.tier} Member</p>
+                </div>
+              </div>
+              <p className="text-sm font-medium leading-snug drop-shadow-md">{post.caption}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Floating Interactive Restaurant Card */}
+      <motion.div
+        animate={{ 
+          y: minimized ? 'calc(100% - 64px)' : 0, 
+          scale: minimized ? 0.95 : 1
+        }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        className="absolute bottom-6 left-4 right-4 z-50 rounded-3xl p-1 text-slate-900 overflow-hidden shadow-2xl"
+      >
+        <div className="bg-white/95 backdrop-blur-xl rounded-2xl relative border border-white/40 shadow-inner">
+          
+          {/* Maximize handle when minimized */}
+          <button 
+            onClick={() => setMinimized(false)} 
+            className={`absolute inset-0 z-10 w-full h-full flex items-center justify-between px-5 transition-opacity ${minimized ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                <Store className="w-4 h-4 text-slate-600" />
+              </div>
+              <span className="font-black text-sm">{activePost.restaurant}</span>
+            </div>
+            <ChevronUp className="w-5 h-5 text-slate-400" />
+          </button>
+
+          {/* Full Card Content */}
+          <div className={`p-4 transition-opacity ${minimized ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className="flex justify-between items-start mb-3">
+              <div>
+                <p className="text-[10px] font-black text-[#E8431A] uppercase tracking-wider mb-1">Featured Spot</p>
+                <h3 className="text-lg font-black leading-none">{activePost.restaurant}</h3>
+                <p className="text-xs text-slate-500 font-medium mt-1">Trendy & Popular • 1.2 mi</p>
+              </div>
+              <button onClick={() => setMinimized(true)} className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+                <ChevronDown className="w-4 h-4 text-slate-500" />
+              </button>
+            </div>
+            
+            <div className="flex items-center gap-2 mb-4 bg-amber-50 px-3 py-2 rounded-xl border border-amber-100">
+              <div className={`px-2 py-0.5 rounded-md text-white text-[10px] font-black badge-${activePost.tier.toLowerCase()}`}>{activePost.tier} Tier</div>
+              <span className="text-xs font-bold text-amber-900">15% OFF available</span>
+            </div>
+
+            <Link to="/restaurant/1" className="w-full py-3 rounded-xl bg-[#E8431A] text-white font-black text-sm flex items-center justify-center shadow-lg shadow-orange-500/30">
+              View Menu & Book
+            </Link>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 export function HomePage() {
+
   const [saved, setSaved]             = useState<Record<string, boolean>>({ '1': true })
   const [showDegradation, setShowDeg] = useState(true)
   const [showLevelUp, setShowLevelUp] = useState(true)
   const [levelUpClicked, setLevelUpClicked] = useState(false)
+  const [activeFeedIndex, setActiveFeedIndex] = useState<number | null>(null)
   const navigate = useNavigate()
   const scrollRef = React.useRef<HTMLDivElement>(null)
 
@@ -438,8 +578,8 @@ export function HomePage() {
             <Link to="/restaurants" className="text-xs font-black shrink-0" style={{ color: BRAND }}>See all</Link>
           </div>
           <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-5 px-5">
-            {COMMUNITY_POSTS.map(post => (
-              <motion.div key={post.id} whileTap={{ scale: 0.97 }} className="shrink-0 w-44 rounded-3xl overflow-hidden bg-white shadow-sm border border-slate-100">
+            {COMMUNITY_POSTS.map((post, index) => (
+              <motion.div key={post.id} onClick={() => setActiveFeedIndex(index)} whileTap={{ scale: 0.97 }} className="shrink-0 w-44 rounded-3xl overflow-hidden bg-white shadow-sm border border-slate-100 cursor-pointer">
                 <div className="relative" style={{ height: 260 }}>
                   <img src={post.image} alt={post.restaurant} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
@@ -810,6 +950,9 @@ export function HomePage() {
         </div>
 
       </div>
+      <AnimatePresence>
+        {activeFeedIndex !== null && <CommunityFeedOverlay initialIndex={activeFeedIndex} onClose={() => setActiveFeedIndex(null)} />}
+      </AnimatePresence>
     </div>
   )
 }
