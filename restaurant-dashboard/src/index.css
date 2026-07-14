@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+/*
+  Ripple Partner Portal — Design System
+  Professional SaaS dashboard aesthetic (Linear/Stripe/Vercel inspired)
+  Brand: #E8431A — warm orange-red, used sparingly on white canvas
+  Font: Inter — clean, data-forward, legible at all sizes
+*/
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+
+  /* Brand — Ripple orange-red */
+  --color-brand-50:  #FEF0EC;
+  --color-brand-100: #FDDDD5;
+  --color-brand-200: #FBB9A8;
+  --color-brand-300: #F78E76;
+  --color-brand-400: #F26A4C;
+  --color-brand-500: #F05030;
+  --color-brand-600: #E8431A;
+  --color-brand-700: #C0300D;
+  --color-brand-800: #9A2208;
+  --color-brand-900: #7A1A08;
+
+  /* Tier — Bronze */
+  --color-bronze-50:  #FEF3C7;
+  --color-bronze-100: #FDE68A;
+  --color-bronze-500: #B45309;
+  --color-bronze-600: #92400E;
+
+  /* Tier — Silver */
+  --color-silver-50:  #F8FAFC;
+  --color-silver-100: #F1F5F9;
+  --color-silver-500: #64748B;
+  --color-silver-600: #475569;
+
+  /* Tier — Gold */
+  --color-gold-50:  #FFFBEB;
+  --color-gold-100: #FEF3C7;
+  --color-gold-500: #D97706;
+  --color-gold-600: #B45309;
+
+  /* Tier — Platinum */
+  --color-platinum-50:  #F3F0FF;
+  --color-platinum-100: #EDE9FE;
+  --color-platinum-500: #7C3AED;
+  --color-platinum-600: #6D28D9;
+
+  /* Tier — Diamond */
+  --color-diamond-50:  #F0F9FF;
+  --color-diamond-100: #E0F2FE;
+  --color-diamond-500: #0284C7;
+  --color-diamond-600: #0369A1;
+
+  /* Neutral — cool gray for dashboard */
+  --color-neutral-0:   #FFFFFF;
+  --color-neutral-50:  #F9FAFB;
+  --color-neutral-100: #F3F4F6;
+  --color-neutral-200: #E5E7EB;
+  --color-neutral-300: #D1D5DB;
+  --color-neutral-400: #9CA3AF;
+  --color-neutral-500: #6B7280;
+  --color-neutral-600: #4B5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1F2937;
+  --color-neutral-900: #111827;
+  --color-neutral-950: #030712;
+
+  /* Semantic */
+  --color-success-50:  #F0FDF4;
+  --color-success-500: #22C55E;
+  --color-success-600: #16A34A;
+  --color-warning-50:  #FFFBEB;
+  --color-warning-500: #F59E0B;
+  --color-warning-600: #D97706;
+  --color-danger-50:   #FFF1F2;
+  --color-danger-500:  #EF4444;
+  --color-danger-600:  #DC2626;
+}
+
+/* ─── Global base ─────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #FFFFFF;
+    color: #111827;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #111827;
+  }
+
+  input, textarea, select, button {
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background-color: #FDDDD5;
+    color: #E8431A;
+  }
+}
+
+/* ─── Utilities ───────────────────────────────────────────── */
+@layer utilities {
+
+  /* Animations */
+  .animate-fade-in {
+    animation: fade-in 0.25s ease-out both;
+  }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(16px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+
+  /* Tier badge gradients */
+  .badge-bronze {
+    background: linear-gradient(135deg, #92400E 0%, #B45309 60%, #92400E 100%);
+    color: #FFFFFF;
+  }
+  .badge-silver {
+    background: linear-gradient(135deg, #334155 0%, #64748B 60%, #334155 100%);
+    color: #FFFFFF;
+  }
+  .badge-gold {
+    background: linear-gradient(135deg, #713F12 0%, #D97706 60%, #713F12 100%);
+    color: #FFFFFF;
+  }
+  .badge-platinum {
+    background: linear-gradient(135deg, #4C1D95 0%, #7C3AED 60%, #4C1D95 100%);
+    color: #FFFFFF;
+  }
+  .badge-diamond {
+    background: linear-gradient(135deg, #075985 0%, #0284C7 60%, #075985 100%);
+    color: #FFFFFF;
+  }
+
+  /* Tier icon circle backgrounds */
+  .tier-icon-bronze   { background: #FEF3C7; color: #B45309; }
+  .tier-icon-silver   { background: #F1F5F9; color: #475569; }
+  .tier-icon-gold     { background: #FEF9C3; color: #D97706; }
+  .tier-icon-platinum { background: #F3F0FF; color: #7C3AED; }
+  .tier-icon-diamond  { background: #F0F9FF; color: #0284C7; }
+
+  /* Sidebar dark theme */
+  .sidebar-bg { background-color: #0F1117; }
+  .sidebar-item {
+    color: #9CA3AF;
+    transition: background 0.15s, color 0.15s;
+  }
+  .sidebar-item:hover {
+    background-color: rgba(255,255,255,0.06);
+    color: #F9FAFB;
+  }
+  .sidebar-item-active {
+    background-color: rgba(232,67,26,0.12);
+    color: #E8431A;
+  }
+
+  /* Thin scrollbar for content areas */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 99px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Card shadow presets */
+  .shadow-card   { box-shadow: 0 1px 3px 0 rgba(0,0,0,0.06), 0 1px 2px -1px rgba(0,0,0,0.04); }
+  .shadow-card-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.04); }
+  .shadow-card-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04); }
+
+  /* Highlight ring for focused inputs */
+  .ring-brand:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(232, 67, 26, 0.15);
+    border-color: #E8431A;
+  }
+
+  /* Program strength ring */
+  @property --ring-progress {
+    syntax: '<number>';
+    initial-value: 0;
+    inherits: false;
+  }
+}

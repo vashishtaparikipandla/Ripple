@@ -50,12 +50,20 @@ jobs:
           npm ci
           npm run build
 
+      - name: Build dashboard
+        run: |
+          cd v2-branch/restaurant-dashboard
+          npm ci
+          npm run build
+
       - name: Prepare artifact
         run: |
           mkdir site
           cp -r main-branch/dist/* site/
           mkdir site/v2
           cp -r v2-branch/dist/* site/v2/
+          mkdir site/dashboard
+          cp -r v2-branch/restaurant-dashboard/dist/* site/dashboard/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
